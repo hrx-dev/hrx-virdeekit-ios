@@ -74,6 +74,13 @@ target 'VirdeeKit' do
   end
 end
 
-target 'VirdeeNativeSDKExample' do
-  # Local harness. Links VirdeeKit; brings no React Native pods of its own.
-end
+# The harness app is deliberately NOT a CocoaPods target.
+#
+# Listing it here makes CocoaPods treat it as a host target for VirdeeKit and
+# link every React Native static library into the app as well. React Native then
+# exists twice — once inside VirdeeKit.framework, once in the app binary — and
+# the duplicate ObjC classes silently break the bridge: native modules register
+# against one copy of the runtime while the Swift handlers live in the other.
+#
+# The app links VirdeeKit.framework and nothing else, which is exactly how HRX
+# consumes it (HRX has no Podfile at all).

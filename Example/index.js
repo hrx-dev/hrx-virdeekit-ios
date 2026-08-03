@@ -149,7 +149,7 @@ const STATUS_COMPLETED = 'COMPLETED';
 // Surface 1: Controller (hidden) — inits the SDK and drives the flow
 // -----------------------------------------------------------------------------
 
-function VirdeeController({ accessGrantId, accessToken, env }) {
+function VirdeeController({ accessGrantId, accessToken, refreshToken, env }) {
   const { fetchFullDetailsById } = useAccessGrant();
   const startedRef = useRef(false);
 
@@ -214,6 +214,7 @@ function VirdeeController({ accessGrantId, accessToken, env }) {
           env: env || 'production',
           accessGrantId,
           accessToken,
+          ...(refreshToken ? { refreshToken } : {}),
         });
         const grant = await fetchFullDetailsById(accessGrantId);
         console.log('[VirdeeController] AccessGrant recovered');
