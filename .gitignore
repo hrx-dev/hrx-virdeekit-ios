@@ -32,3 +32,6 @@ xcuserdata/
 .metro-health-check*
 npm-debug.log
 yarn-error.log
+
+# Machine-local: RN writes the absolute node path here.
+Example/ios/.xcode.env.local
