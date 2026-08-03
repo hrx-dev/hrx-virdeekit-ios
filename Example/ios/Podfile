@@ -1,0 +1,79 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/react-native/scripts/cocoapods/helpers.rb'
+
+# HRX ships iOS 17. Virdee's original example used 15.1 and Xcode 26 later
+# rewrote the project to 26.2; both are wrong for us.
+platform :ios, '17.0'
+install! 'cocoapods', :deterministic_uuids => false
+
+prepare_react_native_project!
+
+# React Native lives on the framework target, not on the app. VirdeeKit is what
+# ships to HRX; VirdeeNativeSDKExample below is only a local harness for trying
+# the flows and for Metro-driven development of the JS screens.
+target 'VirdeeKit' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => true,
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  post_install do |installer|
+    react_native_post_install(
+      installer,
+      "../node_modules/react-native",
+      :mac_catalyst_enabled => false
+    )
+
+    # --- Virdee's own fix, kept verbatim -----------------------------------
+    # fmt 11.0.2 sets FMT_USE_CONSTEVAL=1 for newer clang, but Apple Clang's
+    # consteval support rejects it:
+    #   error: call to consteval function ... is not a constant expression
+    # Forcing the macro off is better than bumping fmt: it lives in the Podfile,
+    # survives `yarn install`, and leaves folly's expected fmt API untouched.
+    fmt_base = File.join(installer.sandbox.root, 'fmt/include/fmt/base.h')
+    if File.exist?(fmt_base)
+      content = File.read(fmt_base)
+      patched = content.gsub('#  define FMT_USE_CONSTEVAL 1', '#  define FMT_USE_CONSTEVAL 0')
+      if patched != content
+        File.chmod(0644, fmt_base)
+        File.write(fmt_base, patched)
+      end
+    end
+
+    # The pods are compiled into VirdeeKit.framework, and their source paths end
+    # up inside it — so the shipped artifact would otherwise carry the build
+    # machine's directory layout, including whoever's home directory.
+    #
+    # It must be -ffile-prefix-map, not -fdebug-prefix-map: folly and React-Fabric
+    # bake __FILE__ into assertion strings, which land in __TEXT rather than in
+    # debug info. -fdebug-prefix-map does not touch macros, and `strip` cannot
+    # remove them either. -ffile-prefix-map covers both.
+    #
+    # Both /private/tmp and /tmp forms are mapped: macOS reaches the same
+    # directory through a symlink and clang records whichever it was given.
+    checkout = File.expand_path(File.join(installer.sandbox.root, '..', '..'))
+    prefixes = [checkout, checkout.sub(%r{\A/private}, '')].uniq
+    remap = prefixes.map { |p| "-ffile-prefix-map=#{p}=/VirdeeKit" }.join(' ')
+
+    installer.pods_project.targets.each do |t|
+      t.build_configurations.each do |c|
+        c.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.0'
+        # Only VirdeeKit itself needs module stability; several pods fail with it.
+        c.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'NO'
+
+        %w[OTHER_CFLAGS OTHER_CPLUSPLUSFLAGS].each do |key|
+          existing = c.build_settings[key] || ['$(inherited)']
+          existing = [existing] unless existing.is_a?(Array)
+          c.build_settings[key] = existing + [remap]
+        end
+      end
+    end
+  end
+end
+
+target 'VirdeeNativeSDKExample' do
+  # Local harness. Links VirdeeKit; brings no React Native pods of its own.
+end

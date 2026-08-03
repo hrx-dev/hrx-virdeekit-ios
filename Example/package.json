@@ -1,0 +1,42 @@
+{
+  "name": "virdee-native-sdk-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "ios": "react-native run-ios"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-community/netinfo": "^11.4.1",
+    "@react-navigation/native": "^7.1.6",
+    "@react-navigation/native-stack": "^7.3.10",
+    "@virdee-inc/sdk-core": "^4.0.0",
+    "@virdee-inc/sdk-idv-clear": "^1.0.0",
+    "@virdee-inc/sdk-mobile-key-seos": "^1.0.0",
+    "react": "19.0.0",
+    "react-native": "0.79.4",
+    "react-native-bluetooth-state-manager": "^2.0.4",
+    "react-native-device-info": "^15.0.1",
+    "react-native-nitro-modules": "^0.32.0",
+    "react-native-safe-area-context": "^5.6.2",
+    "react-native-screens": "4.10.0",
+    "react-native-svg": "^15.11.2",
+    "react-native-webview": "^13.16.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "latest",
+    "@react-native-community/cli-platform-ios": "latest",
+    "@react-native/babel-preset": "0.79.4",
+    "@react-native/metro-config": "0.79.4",
+    "@react-native/typescript-config": "0.79.4",
+    "@types/react": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "yarn@4.5.3"
+}

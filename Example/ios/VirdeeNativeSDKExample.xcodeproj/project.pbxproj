@@ -1,0 +1,1040 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		18C92879A184148263549A90 /* VirdeeServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */; };
+		1C6065AF4296E559E33EA9A8 /* VirdeeFlowBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */; };
+		4C23348624F04F2DFE59857D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7DCC29EEAE78CCB86B9959 /* Foundation.framework */; };
+		58918DC4C432180B7086A71C /* VirdeeFlowBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E18BEA56B4EBF7DEA2E0E2 /* VirdeeFlowBridge.m */; };
+		820EE73D5E3754ABAFA26A81 /* VirdeeKitVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C527A9B899E246E97A2BA3F /* VirdeeKitVersion.swift */; };
+		97A1BBFDA016A5E16A6DD06E /* libPods-VirdeeKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3697E918FDFD74B3C9884387 /* libPods-VirdeeKit.a */; };
+		A2FDA6B57793548BCC6E1831 /* VirdeeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A626094826AC86DEF9A0EDFE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0A45680E105CD272307D8745 /* PrivacyInfo.xcprivacy */; };
+		C368A0FB1C680ABA3AFEBECD /* VirdeeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5280ACACAEE62C902A552619 /* VirdeeService.swift */; };
+		D9636D61A7FE5E58AE4692DD /* VirdeeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */; };
+		DB0A12E8FA8CA0CFBF8C4B5A /* libPods-VirdeeNativeSDKExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */; };
+		E38A8F2BCA5E1AC287C33FAC /* VirdeeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D6D886256F399456010AC /* VirdeeLog.swift */; };
+		E6C1DE3A5F800DB982322C0B /* VirdeeRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8F81C0B42F33D58A002DBDA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F81C09E2F33D589002DBDA2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F81C0A52F33D589002DBDA2;
+			remoteInfo = VirdeeNativeSDKExample;
+		};
+		8F81C0BE2F33D58A002DBDA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F81C09E2F33D589002DBDA2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F81C0A52F33D589002DBDA2;
+			remoteInfo = VirdeeNativeSDKExample;
+		};
+		A530D84D52798C45C4057C57 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F81C09E2F33D589002DBDA2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DBAC0B13789B3235E35A989D;
+			remoteInfo = VirdeeKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		11C94361680726943957E399 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A2FDA6B57793548BCC6E1831 /* VirdeeKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0A45680E105CD272307D8745 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		19DEC407C44591D8D37D2F8F /* Pods-VirdeeNativeSDKExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeNativeSDKExample.debug.xcconfig"; path = "Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample.debug.xcconfig"; sourceTree = "<group>"; };
+		1F409EB663F18747BCE9AB5B /* VirdeeNativeSDKExampleApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VirdeeNativeSDKExampleApp.swift; sourceTree = "<group>"; };
+		2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeRuntime.swift; path = VirdeeKit/VirdeeRuntime.swift; sourceTree = "<group>"; };
+		3697E918FDFD74B3C9884387 /* libPods-VirdeeKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VirdeeKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4383A08BC4A8CF8D0227A4D4 /* Pods-VirdeeNativeSDKExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeNativeSDKExample.release.xcconfig"; path = "Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample.release.xcconfig"; sourceTree = "<group>"; };
+		5205BC53711155B8651C9284 /* ReactNativeBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReactNativeBridge.swift; sourceTree = "<group>"; };
+		5280ACACAEE62C902A552619 /* VirdeeService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeService.swift; path = VirdeeKit/VirdeeService.swift; sourceTree = "<group>"; };
+		586D6D886256F399456010AC /* VirdeeLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeLog.swift; path = VirdeeKit/VirdeeLog.swift; sourceTree = "<group>"; };
+		58E18BEA56B4EBF7DEA2E0E2 /* VirdeeFlowBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VirdeeFlowBridge.m; path = VirdeeKit/VirdeeFlowBridge.m; sourceTree = "<group>"; };
+		706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VirdeeKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		780CEEE444FFC3338350791E /* Pods-VirdeeKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeKit.release.xcconfig"; path = "Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit.release.xcconfig"; sourceTree = "<group>"; };
+		7C7DCC29EEAE78CCB86B9959 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		8C527A9B899E246E97A2BA3F /* VirdeeKitVersion.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeKitVersion.swift; path = VirdeeKit/VirdeeKitVersion.swift; sourceTree = "<group>"; };
+		8F81C0A62F33D589002DBDA2 /* VirdeeNativeSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirdeeNativeSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F81C0B32F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirdeeNativeSDKExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F81C0BD2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirdeeNativeSDKExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeServiceImpl.swift; path = VirdeeKit/VirdeeServiceImpl.swift; sourceTree = "<group>"; };
+		B255DEABEB57F407F09DBD2B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B51BDFB291CE778DA8F4755A /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VirdeeNativeSDKExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7CA9EE1B63E528197711F86 /* MockAppleWalletModule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockAppleWalletModule.swift; sourceTree = "<group>"; };
+		F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeFlowBridge.swift; path = VirdeeKit/VirdeeFlowBridge.swift; sourceTree = "<group>"; };
+		F219FA5F83BCB5B67DFF6E2D /* Pods-VirdeeKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeKit.debug.xcconfig"; path = "Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8F0CF4FB2F34108200957299 /* Exceptions for "VirdeeNativeSDKExample" folder in "VirdeeNativeSDKExample" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8F81C0A52F33D589002DBDA2 /* VirdeeNativeSDKExample */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8F81C0A82F33D589002DBDA2 /* VirdeeNativeSDKExample */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8F0CF4FB2F34108200957299 /* Exceptions for "VirdeeNativeSDKExample" folder in "VirdeeNativeSDKExample" target */,
+			);
+			path = VirdeeNativeSDKExample;
+			sourceTree = "<group>";
+		};
+		8F81C0B62F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = VirdeeNativeSDKExampleTests;
+			sourceTree = "<group>";
+		};
+		8F81C0C02F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
+			path = VirdeeNativeSDKExampleUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		10684C3D56CD0A59FCA28EF7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C23348624F04F2DFE59857D /* Foundation.framework in Frameworks */,
+				97A1BBFDA016A5E16A6DD06E /* libPods-VirdeeKit.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0A32F33D589002DBDA2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB0A12E8FA8CA0CFBF8C4B5A /* libPods-VirdeeNativeSDKExample.a in Frameworks */,
+				D9636D61A7FE5E58AE4692DD /* VirdeeKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0B02F33D58A002DBDA2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0BA2F33D58A002DBDA2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D3BC87B3ED618F39F8A7F0B /* VirdeeKit */ = {
+			isa = PBXGroup;
+			children = (
+				5280ACACAEE62C902A552619 /* VirdeeService.swift */,
+				A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */,
+				2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */,
+				F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */,
+				58E18BEA56B4EBF7DEA2E0E2 /* VirdeeFlowBridge.m */,
+				8C527A9B899E246E97A2BA3F /* VirdeeKitVersion.swift */,
+				586D6D886256F399456010AC /* VirdeeLog.swift */,
+			);
+			name = VirdeeKit;
+			sourceTree = "<group>";
+		};
+		20108BC43FBC7ABBB77B5D7C /* VirdeeNativeSDKExample */ = {
+			isa = PBXGroup;
+			children = (
+				1F409EB663F18747BCE9AB5B /* VirdeeNativeSDKExampleApp.swift */,
+				B51BDFB291CE778DA8F4755A /* ContentView.swift */,
+				5205BC53711155B8651C9284 /* ReactNativeBridge.swift */,
+				D7CA9EE1B63E528197711F86 /* MockAppleWalletModule.swift */,
+				B255DEABEB57F407F09DBD2B /* Info.plist */,
+			);
+			path = VirdeeNativeSDKExample;
+			sourceTree = "<group>";
+		};
+		8F81C09D2F33D589002DBDA2 = {
+			isa = PBXGroup;
+			children = (
+				8F81C0A82F33D589002DBDA2 /* VirdeeNativeSDKExample */,
+				8F81C0B62F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests */,
+				8F81C0C02F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests */,
+				8F81C0A72F33D589002DBDA2 /* Products */,
+				0A45680E105CD272307D8745 /* PrivacyInfo.xcprivacy */,
+				8FC73E264C099522EE3FD3C7 /* Pods */,
+				20108BC43FBC7ABBB77B5D7C /* VirdeeNativeSDKExample */,
+				ACB3AE176C0F2169B54B9051 /* Frameworks */,
+				1D3BC87B3ED618F39F8A7F0B /* VirdeeKit */,
+			);
+			sourceTree = "<group>";
+		};
+		8F81C0A72F33D589002DBDA2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8F81C0A62F33D589002DBDA2 /* VirdeeNativeSDKExample.app */,
+				8F81C0B32F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests.xctest */,
+				8F81C0BD2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests.xctest */,
+				706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8FC73E264C099522EE3FD3C7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				19DEC407C44591D8D37D2F8F /* Pods-VirdeeNativeSDKExample.debug.xcconfig */,
+				4383A08BC4A8CF8D0227A4D4 /* Pods-VirdeeNativeSDKExample.release.xcconfig */,
+				780CEEE444FFC3338350791E /* Pods-VirdeeKit.release.xcconfig */,
+				F219FA5F83BCB5B67DFF6E2D /* Pods-VirdeeKit.debug.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		ACB3AE176C0F2169B54B9051 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */,
+				EF2ACB539063A4EBB2564276 /* iOS */,
+				3697E918FDFD74B3C9884387 /* libPods-VirdeeKit.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EF2ACB539063A4EBB2564276 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7C7DCC29EEAE78CCB86B9959 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		0A3B96DE48197D88175EDB63 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8F81C0A52F33D589002DBDA2 /* VirdeeNativeSDKExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F81C0C72F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExample" */;
+			buildPhases = (
+				90E3AF513DA7C4F3D49C3A04 /* [CP] Check Pods Manifest.lock */,
+				8F81C0A22F33D589002DBDA2 /* Sources */,
+				8F81C0A32F33D589002DBDA2 /* Frameworks */,
+				8F81C0A42F33D589002DBDA2 /* Resources */,
+				11C94361680726943957E399 /* Embed Frameworks */,
+				EF0E16831E5F1BAE0728D9E6 /* [CP] Embed Pods Frameworks */,
+				BDF436BCB9E60AA3D17AD251 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43EF6E2E6EEB5390C9085AA4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8F81C0A82F33D589002DBDA2 /* VirdeeNativeSDKExample */,
+			);
+			name = VirdeeNativeSDKExample;
+			productName = VirdeeNativeSDKExample;
+			productReference = 8F81C0A62F33D589002DBDA2 /* VirdeeNativeSDKExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8F81C0B22F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F81C0CA2F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExampleTests" */;
+			buildPhases = (
+				8F81C0AF2F33D58A002DBDA2 /* Sources */,
+				8F81C0B02F33D58A002DBDA2 /* Frameworks */,
+				8F81C0B12F33D58A002DBDA2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8F81C0B52F33D58A002DBDA2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8F81C0B62F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests */,
+			);
+			name = VirdeeNativeSDKExampleTests;
+			productName = VirdeeNativeSDKExampleTests;
+			productReference = 8F81C0B32F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		8F81C0BC2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F81C0CD2F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExampleUITests" */;
+			buildPhases = (
+				8F81C0B92F33D58A002DBDA2 /* Sources */,
+				8F81C0BA2F33D58A002DBDA2 /* Frameworks */,
+				8F81C0BB2F33D58A002DBDA2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8F81C0BF2F33D58A002DBDA2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8F81C0C02F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests */,
+			);
+			name = VirdeeNativeSDKExampleUITests;
+			productName = VirdeeNativeSDKExampleUITests;
+			productReference = 8F81C0BD2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		DBAC0B13789B3235E35A989D /* VirdeeKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1398C3C7356E1CC03AD84CCD /* Build configuration list for PBXNativeTarget "VirdeeKit" */;
+			buildPhases = (
+				C9C1C952C55E696357494EB6 /* [CP] Check Pods Manifest.lock */,
+				0A3B96DE48197D88175EDB63 /* Headers */,
+				CBB8FE79B69838E75471EBF1 /* Sources */,
+				10684C3D56CD0A59FCA28EF7 /* Frameworks */,
+				FBF2CECC52EC521891F96587 /* Resources */,
+				9C23F62543286C14B17FD000 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VirdeeKit;
+			productName = VirdeeKit;
+			productReference = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8F81C09E2F33D589002DBDA2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					8F81C0A52F33D589002DBDA2 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					8F81C0B22F33D58A002DBDA2 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 8F81C0A52F33D589002DBDA2;
+					};
+					8F81C0BC2F33D58A002DBDA2 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 8F81C0A52F33D589002DBDA2;
+					};
+				};
+			};
+			buildConfigurationList = 8F81C0A12F33D589002DBDA2 /* Build configuration list for PBXProject "VirdeeNativeSDKExample" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8F81C09D2F33D589002DBDA2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 8F81C0A72F33D589002DBDA2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8F81C0A52F33D589002DBDA2 /* VirdeeNativeSDKExample */,
+				8F81C0B22F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests */,
+				8F81C0BC2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests */,
+				DBAC0B13789B3235E35A989D /* VirdeeKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8F81C0A42F33D589002DBDA2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A626094826AC86DEF9A0EDFE /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0B12F33D58A002DBDA2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0BB2F33D58A002DBDA2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FBF2CECC52EC521891F96587 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		90E3AF513DA7C4F3D49C3A04 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VirdeeNativeSDKExample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9C23F62543286C14B17FD000 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BDF436BCB9E60AA3D17AD251 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9C1C952C55E696357494EB6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VirdeeKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EF0E16831E5F1BAE0728D9E6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8F81C0A22F33D589002DBDA2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0AF2F33D58A002DBDA2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F81C0B92F33D58A002DBDA2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBB8FE79B69838E75471EBF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C368A0FB1C680ABA3AFEBECD /* VirdeeService.swift in Sources */,
+				18C92879A184148263549A90 /* VirdeeServiceImpl.swift in Sources */,
+				E6C1DE3A5F800DB982322C0B /* VirdeeRuntime.swift in Sources */,
+				1C6065AF4296E559E33EA9A8 /* VirdeeFlowBridge.swift in Sources */,
+				58918DC4C432180B7086A71C /* VirdeeFlowBridge.m in Sources */,
+				820EE73D5E3754ABAFA26A81 /* VirdeeKitVersion.swift in Sources */,
+				E38A8F2BCA5E1AC287C33FAC /* VirdeeLog.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43EF6E2E6EEB5390C9085AA4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VirdeeKit;
+			target = DBAC0B13789B3235E35A989D /* VirdeeKit */;
+			targetProxy = A530D84D52798C45C4057C57 /* PBXContainerItemProxy */;
+		};
+		8F81C0B52F33D58A002DBDA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F81C0A52F33D589002DBDA2 /* VirdeeNativeSDKExample */;
+			targetProxy = 8F81C0B42F33D58A002DBDA2 /* PBXContainerItemProxy */;
+		};
+		8F81C0BF2F33D58A002DBDA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F81C0A52F33D589002DBDA2 /* VirdeeNativeSDKExample */;
+			targetProxy = 8F81C0BE2F33D58A002DBDA2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		8F81C0C52F33D58A002DBDA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USE_HERMES = true;
+			};
+			name = Debug;
+		};
+		8F81C0C62F33D58A002DBDA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				USE_HERMES = true;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8F81C0C82F33D58A002DBDA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 19DEC407C44591D8D37D2F8F /* Pods-VirdeeNativeSDKExample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VirdeeNativeSDKExample/VirdeeNativeSDKExample.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VirdeeNativeSDKExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8F81C0C92F33D58A002DBDA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4383A08BC4A8CF8D0227A4D4 /* Pods-VirdeeNativeSDKExample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = VirdeeNativeSDKExample/VirdeeNativeSDKExample.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = VirdeeNativeSDKExample/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		8F81C0CB2F33D58A002DBDA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example.VirdeeNativeSDKExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VirdeeNativeSDKExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VirdeeNativeSDKExample";
+			};
+			name = Debug;
+		};
+		8F81C0CC2F33D58A002DBDA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example.VirdeeNativeSDKExampleTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VirdeeNativeSDKExample.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VirdeeNativeSDKExample";
+			};
+			name = Release;
+		};
+		8F81C0CE2F33D58A002DBDA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example.VirdeeNativeSDKExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VirdeeNativeSDKExample;
+			};
+			name = Debug;
+		};
+		8F81C0CF2F33D58A002DBDA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L5AJY6428X;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-Wl,-ld_classic",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.virdee.reactnativesdk.example.VirdeeNativeSDKExampleUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VirdeeNativeSDKExample;
+			};
+			name = Release;
+		};
+		D5B0360B248E7387A1AD3053 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 780CEEE444FFC3338350791E /* Pods-VirdeeKit.release.xcconfig */;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-ffile-prefix-map=$(SRCROOT)/..=/VirdeeKit",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
+				PRODUCT_NAME = VirdeeKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				SWIFT_SERIALIZE_DEBUGGING_OPTIONS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		DFD0E4128F78A187CC97D2C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F219FA5F83BCB5B67DFF6E2D /* Pods-VirdeeKit.debug.xcconfig */;
+			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-ffile-prefix-map=$(SRCROOT)/..=/VirdeeKit",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
+				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
+				PRODUCT_NAME = VirdeeKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = NO;
+				SWIFT_SERIALIZE_DEBUGGING_OPTIONS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1398C3C7356E1CC03AD84CCD /* Build configuration list for PBXNativeTarget "VirdeeKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5B0360B248E7387A1AD3053 /* Release */,
+				DFD0E4128F78A187CC97D2C9 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F81C0A12F33D589002DBDA2 /* Build configuration list for PBXProject "VirdeeNativeSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F81C0C52F33D58A002DBDA2 /* Debug */,
+				8F81C0C62F33D58A002DBDA2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F81C0C72F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F81C0C82F33D58A002DBDA2 /* Debug */,
+				8F81C0C92F33D58A002DBDA2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F81C0CA2F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F81C0CB2F33D58A002DBDA2 /* Debug */,
+				8F81C0CC2F33D58A002DBDA2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8F81C0CD2F33D58A002DBDA2 /* Build configuration list for PBXNativeTarget "VirdeeNativeSDKExampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F81C0CE2F33D58A002DBDA2 /* Debug */,
+				8F81C0CF2F33D58A002DBDA2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8F81C09E2F33D589002DBDA2 /* Project object */;
+}
