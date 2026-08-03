@@ -220,9 +220,16 @@ Without them the app aborts the moment it launches:
 *Library not loaded: @rpath/SeosMobileKeysSDK.framework/SeosMobileKeysSDK*, then the same
 for hermes. Building and linking succeed either way — this only shows at runtime.
 
-> **Not done yet.** `Package.swift` declares one `binaryTarget`. These two were copied into
-> the harness by hand to get a test running. Before HRX can consume the package they need
-> to be committed under `Artifacts/` and declared as their own binary targets.
+All three are committed under `Artifacts/` and declared as separate binary targets. The
+`VirdeeKit` wrapper target depends on all three, so a consumer still writes one `import`
+and Xcode embeds all three by itself — no manual copying into the host app.
+
+`build-xcframework.sh` re-copies both vendored frameworks from `node_modules` and `Pods`
+on every run. They must not drift from the binary that was just linked against them.
+
+Hermes is rebuilt with only the two iOS slices. CocoaPods vendors it with tvOS, Mac
+Catalyst and visionOS as well — 72 MB instead of 20 MB for platforms this package does not
+support.
 
 ## The JS ↔ Swift contract fails silently
 
@@ -252,7 +259,7 @@ SwiftPM versions are git tags; `Package.swift` has no version field.
 
 ```bash
 # 1. bump the constant BEFORE building — it is compiled into the binary
-sed -i '' 's/let version = "0.2.0"/let version = "0.3.0"/' \
+sed -i '' 's/let version = "0.3.0"/let version = "0.4.0"/' \
   Example/ios/VirdeeKit/VirdeeKitVersion.swift
 # 2. rebuild, 3. commit sources and binary together
 bash Scripts/build-xcframework.sh
@@ -347,11 +354,6 @@ despite their README saying 16.2+). This repo pins **17.0** to match HRX.
   the facade works from the outside.
 
 ## Open items
-
-Known incomplete:
-
-- **`Package.swift` ships one binary target, but three are needed** — see
-  "VirdeeKit is three binaries, not one". Until then a consumer crashes at launch.
 
 Blocked on Virdee:
 
