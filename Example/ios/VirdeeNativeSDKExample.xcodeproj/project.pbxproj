@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		18C92879A184148263549A90 /* VirdeeServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */; };
 		1C6065AF4296E559E33EA9A8 /* VirdeeFlowBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */; };
+		4BFF5108F478196D89D5E427 /* hermes.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D603CD4EC8460006DEDE907D /* hermes.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4C23348624F04F2DFE59857D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C7DCC29EEAE78CCB86B9959 /* Foundation.framework */; };
+		544CE7D1991F267EFF0B8CDB /* SeosMobileKeysSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A0119BB0CD9A48744015751A /* SeosMobileKeysSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		58918DC4C432180B7086A71C /* VirdeeFlowBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E18BEA56B4EBF7DEA2E0E2 /* VirdeeFlowBridge.m */; };
 		820EE73D5E3754ABAFA26A81 /* VirdeeKitVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C527A9B899E246E97A2BA3F /* VirdeeKitVersion.swift */; };
 		97A1BBFDA016A5E16A6DD06E /* libPods-VirdeeKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3697E918FDFD74B3C9884387 /* libPods-VirdeeKit.a */; };
@@ -19,6 +21,8 @@
 		D9636D61A7FE5E58AE4692DD /* VirdeeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */; };
 		E38A8F2BCA5E1AC287C33FAC /* VirdeeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D6D886256F399456010AC /* VirdeeLog.swift */; };
 		E6C1DE3A5F800DB982322C0B /* VirdeeRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */; };
+		E9208C3A3F71EB66ADBEE88C /* hermes.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = D603CD4EC8460006DEDE907D /* hermes.xcframework */; };
+		FDB9C33963FEB635A2561667 /* SeosMobileKeysSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0119BB0CD9A48744015751A /* SeosMobileKeysSDK.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,8 @@
 			dstSubfolderSpec = 10;
 			files = (
 				A2FDA6B57793548BCC6E1831 /* VirdeeKit.framework in Embed Frameworks */,
+				544CE7D1991F267EFF0B8CDB /* SeosMobileKeysSDK.xcframework in Embed Frameworks */,
+				4BFF5108F478196D89D5E427 /* hermes.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,10 +83,12 @@
 		8F81C0A62F33D589002DBDA2 /* VirdeeNativeSDKExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirdeeNativeSDKExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F81C0B32F33D58A002DBDA2 /* VirdeeNativeSDKExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirdeeNativeSDKExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F81C0BD2F33D58A002DBDA2 /* VirdeeNativeSDKExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VirdeeNativeSDKExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0119BB0CD9A48744015751A /* SeosMobileKeysSDK.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = SeosMobileKeysSDK.xcframework; path = ../../Artifacts/SeosMobileKeysSDK.xcframework; sourceTree = "<group>"; };
 		A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeServiceImpl.swift; path = VirdeeKit/VirdeeServiceImpl.swift; sourceTree = "<group>"; };
 		B255DEABEB57F407F09DBD2B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B51BDFB291CE778DA8F4755A /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VirdeeNativeSDKExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D603CD4EC8460006DEDE907D /* hermes.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = hermes.xcframework; path = ../../Artifacts/hermes.xcframework; sourceTree = "<group>"; };
 		D7CA9EE1B63E528197711F86 /* MockAppleWalletModule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockAppleWalletModule.swift; sourceTree = "<group>"; };
 		F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeFlowBridge.swift; path = VirdeeKit/VirdeeFlowBridge.swift; sourceTree = "<group>"; };
 		F219FA5F83BCB5B67DFF6E2D /* Pods-VirdeeKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeKit.debug.xcconfig"; path = "Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit.debug.xcconfig"; sourceTree = "<group>"; };
@@ -136,6 +144,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9636D61A7FE5E58AE4692DD /* VirdeeKit.framework in Frameworks */,
+				FDB9C33963FEB635A2561667 /* SeosMobileKeysSDK.xcframework in Frameworks */,
+				E9208C3A3F71EB66ADBEE88C /* hermes.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,6 +235,8 @@
 				B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */,
 				EF2ACB539063A4EBB2564276 /* iOS */,
 				3697E918FDFD74B3C9884387 /* libPods-VirdeeKit.a */,
+				A0119BB0CD9A48744015751A /* SeosMobileKeysSDK.xcframework */,
+				D603CD4EC8460006DEDE907D /* hermes.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

@@ -6,14 +6,19 @@ import PackageDescription
 // host app would drag the whole project into an .xcworkspace and make every developer
 // compile React Native from source on first clone.
 //
-// The framework is dynamic, so -ObjC and -force_load are resolved while building it
-// and consumers need no unsafeFlags — which SwiftPM forbids for versioned dependencies
-// anyway.
+// Three binary targets, not one. VirdeeKit.framework links two vendored dynamic
+// frameworks that it does not contain:
 //
-// NOTE: this declares one binary target, but VirdeeKit links two more dynamic
-// frameworks it does not contain — SeosMobileKeysSDK and hermes. Until those ship here
-// as binary targets too, a consumer aborts at launch with "Library not loaded".
-// See "VirdeeKit is three binaries, not one" in the README.
+//   otool -L Artifacts/VirdeeKit.xcframework/ios-arm64/VirdeeKit.framework/VirdeeKit
+//     @rpath/SeosMobileKeysSDK.framework/SeosMobileKeysSDK
+//     @rpath/hermes.framework/hermes
+//
+// They have to ship alongside or the app aborts the moment it launches with
+// "Library not loaded". Building and linking succeed either way — this only shows
+// at runtime, which is why it went unnoticed for a while.
+//
+// The consumer still imports one module: the wrapper target re-exports the binary
+// and carries the linker settings a binaryTarget cannot.
 let package = Package(
     name: "VirdeeKit",
     platforms: [.iOS(.v17)],
@@ -25,9 +30,25 @@ let package = Package(
             name: "VirdeeKitBinary",
             path: "Artifacts/VirdeeKit.xcframework"
         ),
+        // ASSA ABLOY SEOS, vendored by @virdee-inc/sdk-mobile-key-seos.
+        .binaryTarget(
+            name: "SeosMobileKeysSDK",
+            path: "Artifacts/SeosMobileKeysSDK.xcframework"
+        ),
+        // Hermes, the JS engine React Native runs on. Trimmed to the two iOS
+        // slices; the copy CocoaPods vendors also carries tvOS, Mac Catalyst and
+        // visionOS, which more than triples its size for nothing.
+        .binaryTarget(
+            name: "hermes",
+            path: "Artifacts/hermes.xcframework"
+        ),
         .target(
             name: "VirdeeKit",
-            dependencies: ["VirdeeKitBinary"],
+            dependencies: [
+                "VirdeeKitBinary",
+                "SeosMobileKeysSDK",
+                "hermes"
+            ],
             path: "Sources/VirdeeKit",
             linkerSettings: [
                 .linkedFramework("CoreBluetooth"),

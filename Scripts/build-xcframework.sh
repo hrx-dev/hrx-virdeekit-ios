@@ -91,6 +91,50 @@ xcodebuild -create-xcframework \
   -framework "$BUILD/simulator.xcarchive/Products/Library/Frameworks/VirdeeKit.framework" \
   -output "$OUT/VirdeeKit.xcframework"
 
+# --- the two vendored frameworks VirdeeKit links but does not contain ---------
+# Refreshed from node_modules and Pods on every build so they cannot drift out of
+# step with the binary that was just linked against them.
+echo "==> Refreshing vendored frameworks"
+
+SEOS_SRC="$EXAMPLE/node_modules/@virdee-inc/sdk-mobile-key-seos/ios/SEOS_Mobile_Keys_IOS_SDK/Release/SeosMobileKeysSDK.xcframework"
+if [ -d "$SEOS_SRC" ]; then
+  rm -rf "$OUT/SeosMobileKeysSDK.xcframework"
+  cp -R "$SEOS_SRC" "$OUT/"
+else
+  echo "error: SEOS xcframework not found — run yarn install in Example/" >&2
+  exit 1
+fi
+
+# CocoaPods vendors Hermes with tvOS, Mac Catalyst and visionOS slices too, which
+# more than triples its size. Rebuild it with just the two iOS ones.
+HERMES_SRC="$IOS/Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"
+if [ -d "$HERMES_SRC" ]; then
+  rm -rf "$OUT/hermes.xcframework"
+  xcodebuild -create-xcframework \
+    -framework "$HERMES_SRC/ios-arm64/hermes.framework" \
+    -framework "$HERMES_SRC/ios-arm64_x86_64-simulator/hermes.framework" \
+    -output "$OUT/hermes.xcframework" >/dev/null
+else
+  echo "error: hermes xcframework not found — run pod install in Example/ios" >&2
+  exit 1
+fi
+
+# --- guard: no build-machine paths in the shipped binary ----------------------
+# folly and React-Fabric bake __FILE__ into assertion strings, so a missing
+# -ffile-prefix-map leaks whoever built this. Catch it here, not in review.
+for slice in ios-arm64 ios-arm64_x86_64-simulator; do
+  binary="$OUT/VirdeeKit.xcframework/$slice/VirdeeKit.framework/VirdeeKit"
+  [ -f "$binary" ] || continue
+  leaked=$(strings "$binary" | grep -c "/Users/\|/private/tmp" || true)
+  [ "$leaked" -eq 0 ] || {
+    echo "error: $slice embeds $leaked absolute build paths — check -ffile-prefix-map" >&2
+    exit 1
+  }
+done
+
 echo
-du -sh "$OUT/VirdeeKit.xcframework"
-echo "Commit it and tag a version — SwiftPM versions are git tags."
+for f in "$OUT"/*.xcframework; do
+  printf '  %-34s %s\n' "$(basename "$f")" "$(du -sh "$f" | cut -f1)"
+done
+echo
+echo "Commit all three and tag a version — SwiftPM versions are git tags."

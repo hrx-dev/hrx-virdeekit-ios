@@ -1,0 +1,1135 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2 effective-5.10 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
+// swift-module-flags: -target arm64-apple-ios14.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Osize -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name SeosMobileKeysSDK
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2
+import CommonCrypto
+import CoreBluetooth
+import CoreLocation
+import CoreMotion
+import CoreTelephony
+import CryptoKit
+import Foundation
+import LocalAuthentication
+import Network
+import SQLite3
+import Security
+@_exported import SeosMobileKeysSDK
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+import os.log
+import os
+import os.signpost
+public enum MobileKeysStatus {
+  case success, successWithEndpointTerminated
+  public static func == (a: SeosMobileKeysSDK.MobileKeysStatus, b: SeosMobileKeysSDK.MobileKeysStatus) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SeosApduResponse {
+  public var payload: Foundation.Data?
+  public var statusWord: SeosMobileKeysSDK.SeosStatusWord
+  #if compiler(>=5.3) && $NonescapableTypes
+  required public init?(rawData: Foundation.Data)
+  #endif
+  public init(data: Foundation.Data, statusWord: SeosMobileKeysSDK.SeosStatusWord)
+  public func toData() -> Foundation.Data
+  public var description: Swift.String {
+    get
+  }
+  @objc deinit
+}
+extension SeosMobileKeysSDK.SeosApduResponse : Swift.Equatable {
+  public static func == (lhs: SeosMobileKeysSDK.SeosApduResponse, rhs: SeosMobileKeysSDK.SeosApduResponse) -> Swift.Bool
+}
+public let kMobileKeysErrorDomain: Swift.String
+public let kMobileKeysHttpErrorDomain: Swift.String
+public enum SeosSelectionType : Swift.Int {
+  case adf
+  case gdf
+  case extendedADF
+  case emptySeos
+  case none
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum SeosSessionClientIdentifier : Swift.Int {
+  case unspecified
+  case ble
+  case tsm
+  case readback
+  case internalSeos
+  case thirdParty
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public class SeosSessionParameters {
+  public var selectionType: SeosMobileKeysSDK.SeosSelectionType
+  public var sessionClientIdentifier: SeosMobileKeysSDK.SeosSessionClientIdentifier
+  public var privacyKeySet: SeosMobileKeysSDK.SeosPrivacyKeySet?
+  public var authenticationKeySet: SeosMobileKeysSDK.SeosAuthenticationKeySet?
+  public var contactless: Swift.Bool
+  public var autoSplitLargeApduCommands: Swift.Bool
+  public var autoJoinMultipleApduResponses: Swift.Bool
+  public var requireSelectAid: Swift.Bool
+  public var useTestVectors: Swift.Bool
+  public var oidSelectionList: Swift.Array<Foundation.Data>?
+  public var timeoutInMilliSeconds: Swift.Int
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(selectionType: SeosMobileKeysSDK.SeosSelectionType, privacyKeySet: SeosMobileKeysSDK.SeosPrivacyKeySet?, authenticationKeySet: SeosMobileKeysSDK.SeosAuthenticationKeySet?, oidSelectionList: Swift.Array<Foundation.Data>?)
+  #endif
+  public static func parametersForNoSecurityWithSelectAid(shouldSelectAid: Swift.Bool, contactless: Swift.Bool) -> Self
+  public static func parametersForBle() -> Self
+  public static func parametersForTsm() -> Self
+  public static func parametersForCache() -> Self
+  public static func parametersForReadback() -> Self
+  public func requiresSecureMessaging() -> Swift.Bool
+  public static func encryptionAlgorithmForNumber(number: Swift.UInt8) -> SeosMobileKeysSDK.SeosEncryptionAlgorithm
+  public static func hashAlgorithmForNumber(number: Swift.UInt8) -> SeosMobileKeysSDK.SeosHashAlgorithm
+  public static func numberForHashAlgorithm(algorithm: SeosMobileKeysSDK.SeosHashAlgorithm) -> Swift.UInt8
+  public static func numberForEncryptionAlgorithm(algorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm) -> Swift.UInt8
+  public func setSingleOidSelection(data: Foundation.Data)
+  public func description() -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_documentation(visibility: internal) public class SeosTlv : Swift.CustomStringConvertible {
+  public var tag: SeosMobileKeysSDK.SeosTag
+  public var rawPayload: Foundation.Data
+  public var constructedPayload: [SeosMobileKeysSDK.SeosTlv]
+  convenience public init(rawData: Foundation.Data)
+  public static func parse(rawData: Foundation.Data) -> [SeosMobileKeysSDK.SeosTlv]
+  @objc deinit
+}
+extension SeosMobileKeysSDK.SeosTlv {
+  public var description: Swift.String {
+    get
+  }
+}
+extension SeosMobileKeysSDK.SeosTlv : Swift.Equatable {
+  public static func == (lhs: SeosMobileKeysSDK.SeosTlv, rhs: SeosMobileKeysSDK.SeosTlv) -> Swift.Bool
+}
+@_documentation(visibility: internal) public enum SecureChannelOperation : Swift.Int {
+  case ENCRYPT
+  case DECRYPT
+  case GET_PUBLIC_KEYS
+  case CLOSE
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_documentation(visibility: internal) public protocol SecureChannelSender {
+  func sendFromChannel(_ data: Foundation.Data)
+}
+@_documentation(visibility: internal) public protocol SecureChannelReceiver {
+  func didReceiveFromChannel(_ data: Foundation.Data)
+}
+public class SeosSecureChannel {
+  public var isOpen: Swift.Bool {
+    get
+  }
+  public var receiver: (any SeosMobileKeysSDK.SecureChannelReceiver)?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var publicKeys: Foundation.Data? {
+    get
+  }
+  #endif
+  public init(sender: any SeosMobileKeysSDK.SecureChannelSender, seosSession: SeosMobileKeysSDK.SeosSession)
+  public func close()
+  public func writeToChannel(_ data: Foundation.Data) throws
+  public func didReceiveIntoChannel(_ data: Foundation.Data) throws
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class MobileKeysReader {
+  final public var rssiValueLimitsForOpeningTypeKeys: [Swift.Int : Swift.Int8] {
+    get
+  }
+  final public let uuid: Swift.String?
+  final public let readerCanConnect: Swift.Bool
+  final public var latestRssiMeasurement: SeosMobileKeysSDK.MobileKeysRssiMeasurement? {
+    get
+  }
+  final public var lastSuccessfulConnection: Foundation.Date? {
+    get
+  }
+  final public var name: Swift.String? {
+    get
+  }
+  final public var localName: Swift.String? {
+    get
+  }
+  final public var supportedOpeningTypes: [Swift.Int] {
+    get
+  }
+  final public let lastRSSIUpdate: Foundation.Date?
+  final public var readerType: SeosMobileKeysSDK.MobileKeysReaderType {
+    get
+  }
+  @available(*, deprecated, message: "Directly use 'serialNumberData, appSpecificData, uwbOOBData' instead.")
+  final public var optionalScanResponseData: Foundation.Data? {
+    get
+  }
+  final public var serialNumberData: Foundation.Data? {
+    get
+  }
+  final public var appSpecificData: Foundation.Data? {
+    get
+  }
+  final public var uwbOOBData: Foundation.Data? {
+    get
+  }
+  final public var currentPeripheral: CoreBluetooth.CBPeripheral? {
+    get
+  }
+  final public var protocolVersion: SeosMobileKeysSDK.BleProtocol {
+    get
+  }
+  final public var txPowerLevel: Swift.Int {
+    get
+  }
+  final public var isRecentlyUpdated: Swift.Bool {
+    get
+  }
+  convenience public init(name: Swift.String, uuid: Swift.String, version: SeosMobileKeysSDK.BleProtocol, supportedOpeningTypes: [Swift.Int], rssiValuesForOpeningTypes: [Swift.Int : Swift.Int8])
+  convenience public init(name: Swift.String, uuid: Swift.String, version: SeosMobileKeysSDK.BleProtocol, supportedOpeningTypes: [Swift.Int], rssiValuesForOpeningTypes: [Swift.Int : Swift.Int8], requiresTimeoutFreeSession: Swift.Bool)
+  final public func supports(openingType: SeosMobileKeysSDK.MobileKeysOpeningType) -> Swift.Bool
+  final public func rssiList() -> [SeosMobileKeysSDK.MobileKeysRssiMeasurement]
+  final public func rssiHistory() -> [SeosMobileKeysSDK.MobileKeysRssiMeasurement]
+  final public func meanRssi() -> Swift.Int
+  final public func getRssiLimitForOpeningType(_ type: SeosMobileKeysSDK.MobileKeysOpeningType) -> Swift.Int
+  final public func setRssiLimitForOpeningType(_ type: SeosMobileKeysSDK.MobileKeysOpeningType, rssi: Swift.Int)
+  final public func isInRange(for openingType: SeosMobileKeysSDK.MobileKeysOpeningType) -> Swift.Bool
+  @objc deinit
+}
+extension SeosMobileKeysSDK.MobileKeysReader : Foundation.NSCopying {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc final public func copy(with zone: ObjectiveC.NSZone? = nil) -> Any
+  #endif
+}
+extension SeosMobileKeysSDK.MobileKeysReader : Swift.CustomStringConvertible {
+  final public var description: Swift.String {
+    get
+  }
+}
+@_documentation(visibility: internal) public class SeosApduCommandOtp : SeosMobileKeysSDK.SeosApduCommandGetData {
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  required public init?(_ apdu: SeosMobileKeysSDK.SeosApduCommand)
+  #endif
+  required public init(rawData: Foundation.Data)
+  public static func processResponse(_ response: SeosMobileKeysSDK.SeosApduResponse) -> Swift.String
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @_documentation(visibility: internal) public class SeosApduResponseSequence {
+  public var responses: [SeosMobileKeysSDK.SeosApduResponse]
+  public init()
+  public init(responses: [SeosMobileKeysSDK.SeosApduResponse])
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func addApduResponse(_ response: SeosMobileKeysSDK.SeosApduResponse?)
+  #endif
+  public func isComplete() -> Swift.Bool
+  public func getResponses() -> [SeosMobileKeysSDK.SeosApduResponse]
+  @objc deinit
+}
+public enum SeosKeyNumber : Swift.UInt8 {
+  case KEY_0
+  case KEY_1
+  case KEY_2
+  case KEY_3
+  case KEY_4
+  case KEY_5
+  case KEY_6
+  case KEY_7
+  case KEY_8
+  case KEY_9
+  case KEY_10
+  case KEY_11
+  case KEY_12
+  case KEY_13
+  case KEY_14
+  case KEY_15
+  case KEY_16
+  case KEY_17
+  case KEY_18
+  case KEY_19
+  case KEY_20
+  case KEY_21
+  case KEY_22
+  case KEY_23
+  case KEY_24
+  case KEY_25
+  case KEY_26
+  case KEY_27
+  case KEY_28
+  case KEY_29
+  case KEY_30
+  case KEY_31
+  case KEY_FF
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public struct MobileKeysRssiMeasurement {
+  public let rssiValue: Swift.Int
+  public let measuredAtIntervalSince1970: Foundation.TimeInterval
+  public init(rssiValue: Swift.Int, interval: Foundation.TimeInterval)
+}
+extension SeosMobileKeysSDK.MobileKeysRssiMeasurement : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SeosApduCommandPutData : SeosMobileKeysSDK.SeosApduCommand {
+  public init(tag: SeosMobileKeysSDK.SeosTag, data: Foundation.Data, secureMessaging: Swift.Bool, enableChaining: Swift.Bool = true)
+  @objc deinit
+}
+public enum MobileKeysScanMode : Swift.Int {
+  case optimizePerformance
+  case optimizePowerConsumption
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysInfoType : Swift.Int {
+  case bleNotSupported
+  case bleTurnedOff
+  case locationServicesNotEnabled
+  case locationServicesNotDetermined
+  case locationServicesTurnedOff
+  case locationMonitoringNotSupported
+  case locationMonitoringTurnedOff
+  case passcodeWarning
+  case bleSharingTurnedOff
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysOption {
+  case applicationId
+  case version
+  case beaconUUID
+  case tsmPublicCert
+  case tsmBaseURL
+  case customSetupAkeKey
+  case motionManager
+  case customEventValue
+  case customAttributeField
+  case connectingToReaderStopsScanning
+  case appIdForNotification
+  case enableAnalytics
+  case refrainSendEotToReaderInternal
+  case scanConfiguration
+  public static func == (a: SeosMobileKeysSDK.MobileKeysOption, b: SeosMobileKeysSDK.MobileKeysOption) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct MobileKeysLastAuthenticationInfo {
+  public let lastAuthenticatedMobileKey: SeosMobileKeysSDK.MobileKeysKey
+  public let isModified: Swift.Bool
+  public let authenticationCounter: Swift.Int
+  public init(lastAuthenticatedKey: SeosMobileKeysSDK.MobileKeysKey = MobileKeysKey(), authenticationCounter: Swift.Int = 0, isModified: Swift.Bool = false)
+}
+public class SeosSymmetricKeyPair {
+  public init(macKey: Foundation.Data, encKey: Foundation.Data, encAlg: SeosMobileKeysSDK.SeosEncryptionAlgorithm)
+  convenience public init(encKey: Foundation.Data, macKey: Foundation.Data)
+  public var description: Swift.String {
+    get
+  }
+  @objc deinit
+}
+public protocol MobileKeysManagerDelegate : AnyObject {
+  func mobileKeysDidConnect(to reader: SeosMobileKeysSDK.MobileKeysReader, openingType type: SeosMobileKeysSDK.MobileKeysOpeningType)
+  func mobileKeysDidFailToConnect(to reader: SeosMobileKeysSDK.MobileKeysReader, openingType type: SeosMobileKeysSDK.MobileKeysOpeningType, openingStatus status: SeosMobileKeysSDK.MobileKeysOpeningStatusType)
+  func mobileKeysDidDisconnect(from reader: SeosMobileKeysSDK.MobileKeysReader, openingType type: SeosMobileKeysSDK.MobileKeysOpeningType, openingResult result: SeosMobileKeysSDK.MobileKeysOpeningResult)
+  func mobileKeysShouldAttempt(toOpen reader: SeosMobileKeysSDK.MobileKeysReader, openingType type: SeosMobileKeysSDK.MobileKeysOpeningType) -> Swift.Bool
+  func mobileKeysShouldInteract(withScannedReader mobileKeysReader: SeosMobileKeysSDK.MobileKeysReader) -> Swift.Bool
+  func mobileKeysUserDidUnlockGesture()
+  func mobileKeysDidOpen(_ channel: SeosMobileKeysSDK.SeosSecureChannel)
+  func mobileKeysDidExitSecureChannel()
+  func mobileKeysReaderDisappeared(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  func mobileKeysReaderAppeared(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  func mobileKeysReaderUpdated(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  #if compiler(>=5.3) && $NonescapableTypes
+  func mobileKeysUserDidEnterReaderRegion(_ region: CoreLocation.CLRegion, uuid: Swift.String?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func mobileKeysUserDidExitReaderRegion(_ region: CoreLocation.CLRegion, uuid: Swift.String?)
+  #endif
+}
+extension SeosMobileKeysSDK.MobileKeysManagerDelegate {
+  public func mobileKeysShouldInteract(withScannedReader mobileKeysReader: SeosMobileKeysSDK.MobileKeysReader) -> Swift.Bool
+  public func mobileKeysUserDidUnlockGesture()
+  public func mobileKeysDidOpen(_ channel: SeosMobileKeysSDK.SeosSecureChannel)
+  public func mobileKeysDidExitSecureChannel()
+  public func mobileKeysReaderDisappeared(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  public func mobileKeysReaderAppeared(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  public func mobileKeysReaderUpdated(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func mobileKeysUserDidEnterReaderRegion(_ region: CoreLocation.CLRegion, uuid: Swift.String?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func mobileKeysUserDidExitReaderRegion(_ region: CoreLocation.CLRegion, uuid: Swift.String?)
+  #endif
+}
+public struct MobileKeysOpeningResult {
+  public let status: SeosMobileKeysSDK.MobileKeysOpeningStatusType
+  public let statusPayload: Foundation.Data
+  public let connectionDuration: Foundation.TimeInterval
+  public init(status: SeosMobileKeysSDK.MobileKeysOpeningStatusType, statusPayload: Foundation.Data, connectionDuration: Foundation.TimeInterval)
+}
+extension SeosMobileKeysSDK.MobileKeysOpeningResult : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SeosApduCommandGetData : SeosMobileKeysSDK.SeosApduCommand {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(tag: SeosMobileKeysSDK.SeosTag, selectorTag: Foundation.Data? = nil, secureMessaging: Swift.Bool)
+  #endif
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class SeosSelectionResult {
+  public var hashAlgorithm: SeosMobileKeysSDK.SeosHashAlgorithm
+  public var encAlgorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm
+  public var selectedOid: Foundation.Data
+  public var diversifier: Foundation.Data
+  @objc deinit
+}
+public class SeosAuthenticationKeySet {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(keyNumber: SeosMobileKeysSDK.SeosKeyNumber, symmetricKeyPair: SeosMobileKeysSDK.SeosSymmetricKeyPair? = nil, encryptionAlgorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm, global: Swift.Bool = false)
+  #endif
+  public init(keyNumber: SeosMobileKeysSDK.SeosKeyNumber, certificateType: SeosMobileKeysSDK.CertificateType, encryptionAlgorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm, global: Swift.Bool = false)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func authenticationKeysWithSelectionResult(result: SeosMobileKeysSDK.SeosSelectionResult? = nil) -> SeosMobileKeysSDK.SeosSymmetricKeyPair?
+  #endif
+  public func keyRef() -> SeosMobileKeysSDK.SeosKeyNumber
+  @objc deinit
+}
+public struct MobileKeysKey {
+  public let credentialType: Swift.UInt8
+  public let beginDate: Foundation.Date?
+  public let endDate: Foundation.Date?
+  public let keyId: Swift.String?
+  public let externalId: Swift.String?
+  public let label: Swift.String?
+  public let configUrl: Swift.String?
+  public let readbackUrl: Swift.String?
+  public let issuer: Swift.String?
+  public let keyType: Swift.String?
+  public let cardNumber: Swift.String?
+  public let active: Swift.Bool
+  public let additionalMetaData: [Swift.Int : Foundation.Data]
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(credentialType: Swift.UInt8 = 0, beginDate: Foundation.Date? = nil, endDate: Foundation.Date? = nil, keyId: Swift.String? = nil, externalId: Swift.String? = nil, label: Swift.String? = nil, configUrl: Swift.String? = nil, readbackUrl: Swift.String? = nil, issuer: Swift.String? = nil, keyType: Swift.String? = nil, cardNumber: Swift.String? = nil, active: Swift.Bool = false, additionalMetaData: [Swift.Int : Foundation.Data] = [:])
+  #endif
+  public func uniqueIdentifier() -> Swift.String
+  public func isExpired() -> Swift.Bool
+  public func supportsOTP() -> Swift.Bool
+}
+public enum Region : Swift.Int {
+  case `default`
+  case china
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysEnvironmentType : Swift.Int {
+  case prod
+  case demo
+  case test
+  case dev
+  case local
+  case staging
+  case acceptance
+  case unknown
+  public func name() -> Swift.String
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct MobileKeysEndpointInfo {
+  public let seosId: Swift.UInt
+  public var isSetup: Swift.Bool {
+    get
+  }
+  public let environmentType: SeosMobileKeysSDK.MobileKeysEnvironmentType
+  public let seosAppletVersion: Swift.String
+  public let fileSystemAppletVersion: Swift.String
+  public let toolsAppletVersion: Swift.String
+  public let javaCardVersion: Swift.String
+  public let optionFlags: Swift.String
+  public let allocatedFileSystemSize: Swift.Int
+  public let currentTopOfFileSystem: Swift.Int
+  public let snmpBufferSize: Swift.Int
+  public let remainingEPROMSize: Swift.Int
+  public let remainingTransientObjectSpace: Swift.Int
+  public let hashAlg: Swift.UInt8?
+  public let encAlg: Swift.UInt8?
+  @available(*, deprecated, message: "Please disregard this property. The Seos TSM does not support push services")
+  public let pushId: Swift.String?
+  public let lastServerSyncDate: Foundation.Date?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(seosId: Swift.UInt = 0, environmentType: SeosMobileKeysSDK.MobileKeysEnvironmentType = .unknown, seosAppletVersion: Swift.String = "", fileSystemAppletVersion: Swift.String = "", toolsAppletVersion: Swift.String = "", javaCardVersion: Swift.String = "", optionFlags: Swift.String = "", allocatedFileSystemSize: Swift.Int = 0, currentTopOfFileSystem: Swift.Int = 0, snmpBufferSize: Swift.Int = 0, remainingEPROMSize: Swift.Int = 0, remainingTransientObjectSpace: Swift.Int = 0, hashAlg: Swift.UInt8? = nil, encAlg: Swift.UInt8? = nil, pushId: Swift.String = "", lastServerSyncDate: Foundation.Date? = nil)
+  #endif
+  public func getEnvironmentType() -> SeosMobileKeysSDK.MobileKeysEnvironmentType
+  public func getEnvironmentName() -> Swift.String
+  public func getEndpointId() -> Swift.UInt
+}
+extension SeosMobileKeysSDK.MobileKeysEndpointInfo : Swift.Equatable {
+  public static func == (lhs: SeosMobileKeysSDK.MobileKeysEndpointInfo, rhs: SeosMobileKeysSDK.MobileKeysEndpointInfo) -> Swift.Bool
+}
+public class MobileKeysEndpointUpdateSummary {
+  final public let updateDate: Foundation.Date
+  public var updateDuration: Foundation.TimeInterval {
+    get
+  }
+  public var keyIssuedCount: Swift.Int {
+    get
+  }
+  public var keyRevokedCount: Swift.Int {
+    get
+  }
+  public var keyUpdatedCount: Swift.Int {
+    get
+  }
+  public init()
+  public func addKeyIssued()
+  public func addKeyRevoked()
+  public func addKeyUpdated()
+  @objc deinit
+}
+@_cdecl("integrity_j")
+@_documentation(visibility: internal) public func j178273647583()
+@_cdecl("integrity_d")
+@_documentation(visibility: internal) public func d573829478456()
+@_hasMissingDesignatedInitializers public class SeosApduCommand {
+  required public init(rawData: Foundation.Data)
+  public func isManageChannel() -> Swift.Bool
+  public func toData() -> Foundation.Data
+  public var description: Swift.String {
+    get
+  }
+  @objc deinit
+}
+public enum SeosEncryptionAlgorithm : Swift.UInt8 {
+  case ENCRYPTION_ALGO_ERROR
+  case ENCRYPTION_ALGO_AES_128
+  case ENCRYPTION_ALGO_ECC_SECP256R1
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public enum SeosHashAlgorithm : Swift.UInt8 {
+  public typealias RawValue = Swift.UInt8
+  case HASH_ALGO_ERROR
+  case HASH_ALGO_HMAC_SHA_256
+  case HASH_ALGO_CMAC_AES
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+@_documentation(visibility: internal) public protocol SeosSessionProtocol {
+  #if compiler(>=5.3) && $NonescapableTypes
+  var postSessionTearDownOptions: [Swift.AnyHashable : Any]? { get set }
+  #endif
+  func processApduCommand(_ command: SeosMobileKeysSDK.SeosApduCommand, completion: @escaping (SeosMobileKeysSDK.SeosApduResponse) -> ())
+  func processApduCommand(_ command: SeosMobileKeysSDK.SeosApduCommand) throws -> SeosMobileKeysSDK.SeosApduResponse
+  func processApduCommandSequence(_ sequence: SeosMobileKeysSDK.SeosApduCommandSequence) throws -> SeosMobileKeysSDK.SeosApduResponseSequence
+  func closeSession() -> Swift.Bool
+  func processChannel(_ data: Foundation.Data, with operation: SeosMobileKeysSDK.SecureChannelOperation) throws -> Foundation.Data
+  func activeConnection() -> Swift.Bool
+  func isBidirectional() -> Swift.Bool
+}
+public class SeosSession : SeosMobileKeysSDK.SeosSessionProtocol {
+  public var postSessionTearDownOptions: [Swift.AnyHashable : Any]?
+  public init(apduConnection: any SeosMobileKeysSDK.SeosApduConnectionProtocol)
+  public func processApduCommand(_ command: SeosMobileKeysSDK.SeosApduCommand, completion: @escaping (SeosMobileKeysSDK.SeosApduResponse) -> ())
+  public func processApduCommand(_ command: SeosMobileKeysSDK.SeosApduCommand) throws -> SeosMobileKeysSDK.SeosApduResponse
+  public func processApduCommandSequence(_ sequence: SeosMobileKeysSDK.SeosApduCommandSequence) throws -> SeosMobileKeysSDK.SeosApduResponseSequence
+  @discardableResult
+  public func closeSession() -> Swift.Bool
+  public func processChannel(_ data: Foundation.Data, with operation: SeosMobileKeysSDK.SecureChannelOperation) throws -> Foundation.Data
+  public func activeConnection() -> Swift.Bool
+  public func isBidirectional() -> Swift.Bool
+  @objc deinit
+}
+public class SeosStatusWord {
+  public init(upperByte: Swift.UInt8, lowerByte: Swift.UInt8)
+  convenience public init(word: Swift.UInt16)
+  public func toData() -> Foundation.Data
+  public func isOk() -> Swift.Bool
+  public func isError() -> Swift.Bool
+  @objc deinit
+}
+extension SeosMobileKeysSDK.SeosStatusWord : Swift.Equatable {
+  public static func == (lhs: SeosMobileKeysSDK.SeosStatusWord, rhs: SeosMobileKeysSDK.SeosStatusWord) -> Swift.Bool
+}
+@_documentation(visibility: internal) public struct MobileKeysCryptoLib {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(keyPair: Foundation.Data? = nil)
+  #endif
+  public func getSignatureSize() -> Swift.Int
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func getPublicKey() -> Foundation.Data?
+  #endif
+  public func verify(message: Foundation.Data, signature: Foundation.Data, publicKey: Foundation.Data) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func sign(message: Foundation.Data) -> Foundation.Data?
+  #endif
+}
+@_documentation(visibility: internal) @objc public protocol AuthAccessTokenHoldable : ObjectiveC.NSObjectProtocol {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc var accessTokenListener: ((Swift.String?) -> Swift.Void)? { get set }
+  #endif
+  @objc func fetchAccessToken()
+  @objc func clearAccessToken()
+}
+@_documentation(visibility: internal) public enum MobileKeysInternalErrorCode : Swift.Int {
+  case unknown
+  case initFailed
+  case notStarted
+  case alreadyStarted
+  case `internal`
+  case secureElement
+  case endpoint
+  case endpointNotSetup
+  case dataStorageDecryptionFailed
+  case dataStorageEncryptionFailed
+  case dataStorageCorrupted
+  case serverCommunicationFailed
+  case networkUnreachable
+  case sdkBusy
+  case deviceNotEligible
+  case sdkIncompatible
+  case deviceSetupFailedRetry
+  case deviceSetupFailed
+  case invalidInvitationCode
+  case invalidApplication
+  case openingTypeNotPermitted
+  case bluetoothLENotAvailable
+  case regionIncorrect
+  case couldNotReterivePeripheral
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@_documentation(visibility: internal) public enum ListAdfType : Swift.UInt8 {
+  case LIST_ADF_WITHOUT_METADATA
+  case LIST_ADF_WITH_METADATA
+  case LIST_CHANGED_ADF_WITHOUT_METADATA
+  case LIST_CHANGED_ADF_WITH_METADATA
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @_documentation(visibility: internal) public class SeosApduCommandListAdfs : SeosMobileKeysSDK.SeosApduCommand {
+  required public init(rawData: Foundation.Data)
+  public init(oids: Swift.Array<Foundation.Data>, listAdfType: SeosMobileKeysSDK.ListAdfType)
+  convenience public init(listAdfType: SeosMobileKeysSDK.ListAdfType)
+  @objc deinit
+}
+public class SeosProvider : SeosMobileKeysSDK.SeosProviderProtocol {
+  public init(connection: any SeosMobileKeysSDK.SeosApduConnectionProtocol)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func establishSession(sessionParameters: SeosMobileKeysSDK.SeosSessionParameters, description: Swift.String?, completion: @escaping (any SeosMobileKeysSDK.SeosSessionProtocol) -> ()) throws
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func establishSession(sessionParameters: SeosMobileKeysSDK.SeosSessionParameters, description: Swift.String?) throws -> any SeosMobileKeysSDK.SeosSessionProtocol
+  #endif
+  public func establishCardSessionUsingTerminalSession(_ terminalSession: SeosMobileKeysSDK.SeosSession, cardParameters: SeosMobileKeysSDK.SeosSessionParameters, terminalParameters: SeosMobileKeysSDK.SeosSessionParameters) throws -> any SeosMobileKeysSDK.SeosSessionProtocol
+  public func isOpen() -> Swift.Bool
+  public func isBidirectional() -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func currentSessionClient() -> Swift.String?
+  #endif
+  @objc deinit
+}
+@_documentation(visibility: internal) public protocol SeosProviderProtocol {
+  #if compiler(>=5.3) && $NonescapableTypes
+  func establishSession(sessionParameters: SeosMobileKeysSDK.SeosSessionParameters, description: Swift.String?, completion: @escaping (any SeosMobileKeysSDK.SeosSessionProtocol) -> ()) throws
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func establishSession(sessionParameters: SeosMobileKeysSDK.SeosSessionParameters, description: Swift.String?) throws -> any SeosMobileKeysSDK.SeosSessionProtocol
+  #endif
+  func establishCardSessionUsingTerminalSession(_ terminalSession: SeosMobileKeysSDK.SeosSession, cardParameters: SeosMobileKeysSDK.SeosSessionParameters, terminalParameters: SeosMobileKeysSDK.SeosSessionParameters) throws -> any SeosMobileKeysSDK.SeosSessionProtocol
+  func isOpen() -> Swift.Bool
+  func isBidirectional() -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  func currentSessionClient() -> Swift.String?
+  #endif
+}
+public enum MobileKeysErrorCode : Swift.Int {
+  case `internal`
+  case corruptedStorage
+  case endpointNotSetup
+  case sdkBusy
+  case deviceNotEligible
+  case sdkIncompatible
+  case serverUnreachable
+  case deviceSetupFailed
+  case invalidInvitationCode
+  case openingTypeNotPermitted
+  case bluetoothLENotAvailable
+  case regionIncorrect
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysOpeningStatusType : Swift.Int {
+  case success
+  case bluetoothCommunicationFailed
+  case timedOut
+  case outOfRange
+  case busy
+  case motionNotSupported
+  case tapNotSupported
+  case mobileKeyNotFound
+  case readerAntiPassback
+  case readerFailure
+  case bluetoothCommunicationFailedWithDeadLock
+  case deviceTimedOutEarly
+  case deviceTimedOutApdu
+  case deviceTimedOutFragment
+  case readerTimedOutBle
+  case readerTimedOutApdu
+  case readerTimedOutFragment
+  case biDirectionalFailure
+  case openingTypeNotSupported
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysOpeningType : Swift.UInt8, Swift.CaseIterable {
+  case unknown
+  case proximity
+  case motion
+  case seamless
+  case applicationSpecific
+  case enhancedTap
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias AllCases = [SeosMobileKeysSDK.MobileKeysOpeningType]
+  public typealias RawValue = Swift.UInt8
+  nonisolated public static var allCases: [SeosMobileKeysSDK.MobileKeysOpeningType] {
+    get
+  }
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public enum BleProtocol : Swift.Int, Swift.Comparable {
+  public static func < (lhs: SeosMobileKeysSDK.BleProtocol, rhs: SeosMobileKeysSDK.BleProtocol) -> Swift.Bool
+  case legacy
+  case v1
+  case unknown
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public enum MobileKeysReaderType : Swift.UInt8 {
+  case blePeripheral
+  case bleCentral
+  case httpRest
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @_documentation(visibility: internal) public class SeosApduCommandSequence {
+  public init(commands: [SeosMobileKeysSDK.SeosApduCommand])
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers final public class MobileKeysManager {
+  public static let sdkVersion: Swift.String
+  convenience public init(delegate: any SeosMobileKeysSDK.MobileKeysManagerDelegate, options: [SeosMobileKeysSDK.MobileKeysOption : Any]) throws
+  @objc deinit
+  final public func startup() async throws -> SeosMobileKeysSDK.MobileKeysStatus
+  final public func setupEndpoint(_ invitationCode: Swift.String, region: SeosMobileKeysSDK.Region) async throws -> Swift.Bool
+  final public func setupEndpoint(_ invitationCode: Swift.String) async throws -> Swift.Bool
+  final public func updateEndpoint() async throws -> (SeosMobileKeysSDK.MobileKeysStatus, SeosMobileKeysSDK.MobileKeysEndpointUpdateSummary)
+  final public func unregisterEndpoint() async throws -> SeosMobileKeysSDK.MobileKeysEndpointUpdateSummary
+  final public func healthCheck() -> [SeosMobileKeysSDK.MobileKeysInfoType]
+  final public func apiVersion() -> Swift.String
+}
+extension SeosMobileKeysSDK.MobileKeysManager {
+  final public func listMobileKeys() async throws -> [SeosMobileKeysSDK.MobileKeysKey]
+  final public func lastAuthenticationInfo() async throws -> SeosMobileKeysSDK.MobileKeysLastAuthenticationInfo
+  final public func endpointInfo() async throws -> SeosMobileKeysSDK.MobileKeysEndpointInfo
+  final public func isEndpointSetup() async -> Swift.Bool
+}
+extension SeosMobileKeysSDK.MobileKeysManager {
+  final public func setSupportedOpeningTypes(_ openingTypes: [SeosMobileKeysSDK.MobileKeysOpeningType])
+  final public func setTimeoutConfiguration(_ timeoutConfiguration: SeosMobileKeysSDK.MobileKeysTimeoutConfiguration)
+  final public func deviceSupportsBluetoothLowEnergy() -> Swift.Bool
+  final public func deviceHasBluetoothTurnedOn() -> Swift.Bool
+  final public func connect(to reader: SeosMobileKeysSDK.MobileKeysReader, openingType: SeosMobileKeysSDK.MobileKeysOpeningType) throws
+  final public func forceConnect(to reader: SeosMobileKeysSDK.MobileKeysReader, openingType: SeosMobileKeysSDK.MobileKeysOpeningType) throws
+  final public func startReaderScan(in mode: SeosMobileKeysSDK.MobileKeysScanMode, supportedOpeningTypes openingTypes: [SeosMobileKeysSDK.MobileKeysOpeningType], lockServiceCodes: [Swift.Int]) throws
+  final public func stopReaderScan()
+  final public func isScanning() -> Swift.Bool
+  final public func listReaders() -> [SeosMobileKeysSDK.MobileKeysReader]
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func closestReader(withinRangeOf openingType: SeosMobileKeysSDK.MobileKeysOpeningType) -> SeosMobileKeysSDK.MobileKeysReader?
+  #endif
+  final public func handoverPeripheral(to delegate: any CoreBluetooth.CBPeripheralDelegate) -> Swift.Bool
+  final public func cancelReaderConnection(_ reader: SeosMobileKeysSDK.MobileKeysReader)
+}
+extension SeosMobileKeysSDK.MobileKeysManager {
+  final public func activateMobileKey(_ key: SeosMobileKeysSDK.MobileKeysKey) async -> Swift.Bool
+  final public func deactivateMobileKey(_ key: SeosMobileKeysSDK.MobileKeysKey) async -> Swift.Bool
+  final public func dataForKeyOid(_ oidString: Swift.String, tag: SeosMobileKeysSDK.SeosTag) async throws -> Foundation.Data
+  final public func putData(_ data: Foundation.Data, oidString: Swift.String, tag: SeosMobileKeysSDK.SeosTag) async throws
+}
+extension SeosMobileKeysSDK.MobileKeysManager {
+  final public func generateOTPForKey(_ key: SeosMobileKeysSDK.MobileKeysKey) throws -> Swift.String
+  final public func otpCounterForKey(_ key: SeosMobileKeysSDK.MobileKeysKey) throws -> Foundation.NSNumber
+  final public func defaultMobileKeysSeosProvider() -> SeosMobileKeysSDK.SeosProvider
+}
+extension SeosMobileKeysSDK.MobileKeysManager {
+  final public func isAnalyticsEnabled() -> Swift.Bool
+  final public func optInAnalytics()
+  final public func optOutAnalytics()
+}
+@_documentation(visibility: internal) public enum LogType : Swift.Int {
+  case LogSeosCore
+  case LogStatistics
+  case LogBeacon
+  case LogSeosApdus
+  case LogSeosApi
+  case LogSeosAccessApi
+  case LogBleCommunication
+  case LogBleConnection
+  case LogLifecycle
+  case LogKeyChain
+  case LogNetwork
+  case LogPersonalization
+  case LogAPI
+  case LogOpening
+  case LogFileSystem
+  case LogErrorHandler
+  case LogReader
+  case LogSeosSession
+  case LogNfc
+  case LogSecureChannelOpen
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc @_hasMissingDesignatedInitializers @_documentation(visibility: internal) public class AnalyticsAPI : ObjectiveC.NSObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public static func instance(appName: Swift.String, url: Foundation.URL?, headers: [Swift.String : Swift.String]? = nil, authAccessTokenHolder: (any SeosMobileKeysSDK.AuthAccessTokenHoldable)? = nil, source: Swift.String, specVersion: Swift.String, includeDeviceDetails: Swift.Bool = true, additionalParams: [Swift.String : Any] = [:]) -> SeosMobileKeysSDK.AnalyticsAPI
+  #endif
+  @objc deinit
+  @objc public func set(url: Foundation.URL)
+  @objc public func sendCachedEventsImmediately() throws
+  @objc public func register(superProperties properties: [Swift.String : Any]) throws
+  @objc public func time(events: [Swift.String])
+  @objc public func time(event: Swift.String)
+  @objc public func track(event: Swift.String, attributes: [Swift.String : Any], time: Foundation.Date) throws
+}
+@_documentation(visibility: internal) public enum AnalyticsError : Swift.Error {
+  case noURL, noAccessToken, cancelled, sendingInProgress
+  public static func == (a: SeosMobileKeysSDK.AnalyticsError, b: SeosMobileKeysSDK.AnalyticsError) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_documentation(visibility: internal) public let AMS_DEFAULT_MAX_TIME_BETWEEN_FRAGMENTS: Swift.Double
+@_documentation(visibility: internal) public let AMS_DEFAULT_MAX_TIME_BETWEEN_APDUS: Swift.Double
+@_documentation(visibility: internal) public let AMS_DEFAULT_MAX_TIME_CONNECTION: Swift.Double
+public class MobileKeysTimeoutConfiguration {
+  final public let maxTimeBetweenFragments: Foundation.TimeInterval
+  final public let maxTimeBetweenApdus: Foundation.TimeInterval
+  final public let maxConnectionTime: Foundation.TimeInterval
+  public init(maxTimeBetweenFragments: Foundation.TimeInterval = AMS_DEFAULT_MAX_TIME_BETWEEN_FRAGMENTS, maxTimeBetweenApdus: Foundation.TimeInterval = AMS_DEFAULT_MAX_TIME_BETWEEN_APDUS, maxConnectionTime: Foundation.TimeInterval = AMS_DEFAULT_MAX_TIME_CONNECTION)
+  @objc deinit
+}
+extension SeosMobileKeysSDK.MobileKeysTimeoutConfiguration : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class SeosTag : Swift.Equatable {
+  public static func == (lhs: SeosMobileKeysSDK.SeosTag, rhs: SeosMobileKeysSDK.SeosTag) -> Swift.Bool
+  convenience public init(bytes: Foundation.Data)
+  convenience public init(singleByte: Swift.UInt8)
+  convenience public init(firstByte: Swift.UInt8, secondByte: Swift.UInt8)
+  convenience public init(twoBytes: Swift.UInt16)
+  public var description: Swift.String {
+    get
+  }
+  @objc deinit
+}
+extension SeosMobileKeysSDK.SeosTag {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func isEqual(_ object: Any?) -> Swift.Bool
+  #endif
+}
+public protocol SeosApduConnectionProtocol {
+  func activeConnection() -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  func preSessionSetup(options: [Swift.AnyHashable : Any]?, contactless contactLess: Swift.Bool) throws
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func postSessionTearDown(options: [Swift.AnyHashable : Any]?) throws
+  #endif
+  func processApdu(_ data: Foundation.Data, completion: @escaping (_ data: Foundation.Data) -> ())
+  func enableTestVectors(_ enableTestVectors: Swift.Bool)
+  func processChannel(data: Foundation.Data, operation: SeosMobileKeysSDK.SecureChannelOperation) throws -> Foundation.Data
+  func isBidirectional() -> Swift.Bool
+}
+public class SeosPrivacyKeySet {
+  public init(keyNumber: SeosMobileKeysSDK.SeosKeyNumber, symmetricKeyPair: SeosMobileKeysSDK.SeosSymmetricKeyPair, encryptionAlgorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm, usesPrivacy: Swift.Bool)
+  public func privacyKeys() -> SeosMobileKeysSDK.SeosSymmetricKeyPair
+  public func keyRef() -> SeosMobileKeysSDK.SeosKeyNumber
+  @objc deinit
+}
+@_documentation(visibility: internal) public enum CertificateType : Swift.UInt8 {
+  case cvc
+  case x509
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.UInt8)
+  #endif
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+public class SeosMasterAuthenticationKeySet : SeosMobileKeysSDK.SeosAuthenticationKeySet {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(keyNumber: SeosMobileKeysSDK.SeosKeyNumber, masterKey: Foundation.Data, oid: Foundation.Data?, diversifier: Foundation.Data?, encryptionAlgorithm: SeosMobileKeysSDK.SeosEncryptionAlgorithm, global: Swift.Bool)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  override public func authenticationKeysWithSelectionResult(result: SeosMobileKeysSDK.SeosSelectionResult?) -> SeosMobileKeysSDK.SeosSymmetricKeyPair?
+  #endif
+  @objc deinit
+}
+public protocol LogTypeProtocol : Swift.Sendable {
+  var name: Swift.String { get }
+  var type: os.OSLog { get }
+}
+@objc public enum AMSLogType : Swift.Int {
+  case unknown = -1
+  case seosCore
+  case statistics
+  case beacon
+  case seosCache
+  case seosApdus
+  case seosApdusClear
+  case seosApi
+  case seosAccessApi
+  case bleCommunication
+  case bleConnection
+  case lifecycle
+  case keychain
+  case network
+  case personalization
+  case api
+  case opening
+  case fileSystem
+  case errorHandler
+  case reader
+  case rssi
+  case seosSession
+  case nfc
+  case secureChannelOpen
+  case taskchain
+  case rotation
+  case app
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension SeosMobileKeysSDK.AMSLogType : SeosMobileKeysSDK.LogTypeProtocol {
+  public var name: Swift.String {
+    get
+  }
+  public var type: os.OSLog {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers @objc final public class AMSLogger : ObjectiveC.NSObject {
+  public static var isEnabled: Swift.Bool {
+    get async
+  }
+  @objc public static func enabled() async -> Swift.Bool
+  @objc public static func startLogger() async
+  @objc public static func stopLogger() async
+  @objc public static func export(sdkVersion: Swift.String = "Sdk version value") async -> [Swift.String]
+  @objc public static func log(_ message: Swift.String, category: SeosMobileKeysSDK.AMSLogType)
+  @objc public static func warn(_ message: Swift.String)
+  @objc public static func debug(_ message: Swift.String, category: SeosMobileKeysSDK.AMSLogType)
+  @objc public static func info(_ message: Swift.String, category: SeosMobileKeysSDK.AMSLogType)
+  @objc public static func error(_ message: Swift.String, category: SeosMobileKeysSDK.AMSLogType)
+  @objc deinit
+}
+public struct ScanConfiguration {
+  public let checkReaderRssiInRange: Swift.Bool
+  public init(checkReaderRssiInRange: Swift.Bool)
+  public static let defaultConfiguration: SeosMobileKeysSDK.ScanConfiguration
+}
+public protocol MobileKeysMotionRecognizerDelegate : AnyObject {
+  func userMadeUnlockGesture(_ openingType: SeosMobileKeysSDK.MobileKeysOpeningType)
+}
+public protocol MotionRecognizerProtocol {
+  func startTrackingRotation()
+  func stopTrackingRotation()
+  func pauseTrackingRotation()
+  func resumeTrackingRotation()
+  func isTrackingRotation() -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class MobileKeysMotionRecognizer {
+  @objc deinit
+}
+extension SeosMobileKeysSDK.MobileKeysMotionRecognizer : SeosMobileKeysSDK.MotionRecognizerProtocol {
+  public func startTrackingRotation()
+  public func stopTrackingRotation()
+  public func pauseTrackingRotation()
+  public func resumeTrackingRotation()
+  public func isTrackingRotation() -> Swift.Bool
+}
+extension SeosMobileKeysSDK.MobileKeysStatus : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysStatus : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosSelectionType : Swift.Equatable {}
+extension SeosMobileKeysSDK.SeosSelectionType : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosSelectionType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.SeosSessionClientIdentifier : Swift.Equatable {}
+extension SeosMobileKeysSDK.SeosSessionClientIdentifier : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosSessionClientIdentifier : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningType : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningType : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.SecureChannelOperation : Swift.Equatable {}
+extension SeosMobileKeysSDK.SecureChannelOperation : Swift.Hashable {}
+extension SeosMobileKeysSDK.SecureChannelOperation : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.SeosKeyNumber : Swift.Equatable {}
+extension SeosMobileKeysSDK.SeosKeyNumber : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosKeyNumber : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysScanMode : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysScanMode : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysScanMode : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysInfoType : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysInfoType : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysInfoType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysOption : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysOption : Swift.Hashable {}
+extension SeosMobileKeysSDK.Region : Swift.Equatable {}
+extension SeosMobileKeysSDK.Region : Swift.Hashable {}
+extension SeosMobileKeysSDK.Region : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysEnvironmentType : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysEnvironmentType : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysEnvironmentType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.SeosEncryptionAlgorithm : Swift.Equatable {}
+extension SeosMobileKeysSDK.SeosEncryptionAlgorithm : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosEncryptionAlgorithm : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.SeosHashAlgorithm : Swift.Equatable {}
+extension SeosMobileKeysSDK.SeosHashAlgorithm : Swift.Hashable {}
+extension SeosMobileKeysSDK.SeosHashAlgorithm : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningStatusType : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningStatusType : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysOpeningStatusType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysInternalErrorCode : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysInternalErrorCode : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysInternalErrorCode : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.ListAdfType : Swift.Equatable {}
+extension SeosMobileKeysSDK.ListAdfType : Swift.Hashable {}
+extension SeosMobileKeysSDK.ListAdfType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysErrorCode : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysErrorCode : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysErrorCode : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.BleProtocol : Swift.Hashable {}
+extension SeosMobileKeysSDK.BleProtocol : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.MobileKeysReaderType : Swift.Equatable {}
+extension SeosMobileKeysSDK.MobileKeysReaderType : Swift.Hashable {}
+extension SeosMobileKeysSDK.MobileKeysReaderType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.LogType : Swift.Equatable {}
+extension SeosMobileKeysSDK.LogType : Swift.Hashable {}
+extension SeosMobileKeysSDK.LogType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.AnalyticsError : Swift.Equatable {}
+extension SeosMobileKeysSDK.AnalyticsError : Swift.Hashable {}
+extension SeosMobileKeysSDK.CertificateType : Swift.Equatable {}
+extension SeosMobileKeysSDK.CertificateType : Swift.Hashable {}
+extension SeosMobileKeysSDK.CertificateType : Swift.RawRepresentable {}
+extension SeosMobileKeysSDK.AMSLogType : Swift.Equatable {}
+extension SeosMobileKeysSDK.AMSLogType : Swift.Hashable {}
+extension SeosMobileKeysSDK.AMSLogType : Swift.RawRepresentable {}
