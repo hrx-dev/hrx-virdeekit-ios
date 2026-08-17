@@ -10,10 +10,10 @@ CocoaPods and no Node toolchain. VirdeeKit exists so that stays true: React Nati
 Built on Virdee's own native host example, which they supply on request — the public
 docs pages for native integration are published empty.
 
-> **Status: proof of concept.** The framework builds and the SDK runs, but the flows
-> have never been driven end to end: Virdee's example ships placeholder credentials
-> (`YOUR_ACCESS_GRANT_ID` / `YOUR_ACCESS_TOKEN`) and the app stops at
-> "Checking requirements…". Real test credentials are the remaining blocker.
+> **Status: proof of concept, initialising against live credentials.** The SDK boots,
+> reports requirements, and both flows present and report their outcome back through
+> the facade. Nothing has been driven to *completion* yet: ID verification stops at the
+> CLEAR sign-in, and the digital key needs a physical device.
 
 ## Using it from HRX
 
@@ -352,16 +352,31 @@ despite their README saying 16.2+). This repo pins **17.0** to match HRX.
   That is the whole premise of this package, and it holds.
 - `Example/` is that app. It is not a decorative sample — it is the only thing proving
   the facade works from the outside.
+- Against live production credentials the SDK initialises, `requirementsLoaded`,
+  `mobileKeyAvailable` and `idVerificationRequired` all arrive, `presentIDVerification()`
+  reaches CLEAR's sign-in, `presentMobileKey()` mounts the SEOS screen, and closing it
+  comes back as `mobileKey(.closed)`. The round trip native → JS → SDK → JS → native holds.
+
+### The harness must not link the shipped artifact
+
+`Example/` builds VirdeeKit from source against CocoaPods, so it must use the **pod's**
+hermes, not `Artifacts/hermes.xcframework`. The shipped one is built from a Release
+archive and has no debugger, so pointing the harness at it drops every
+`inspector_modern` symbol and Debug fails to link with a wall of
+`facebook::hermes::inspector_modern::…` undefined symbols that says nothing about the
+real cause. The project references
+`Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework` for that
+reason. `Artifacts/` is for consumers of the package only.
 
 ## Open items
 
 Blocked on Virdee:
 
-1. **A working `accessToken`.** With the credentials tried so far the SDK gets
-   `Context creation failed: Unauthorized`, wrapped by Virdee in an HTTP 500 rather than a
-   401. Worth asking them (a) whose key is supposed to sign the token — the docs say
-   Virdee's API issues it and the HRX backend only relays — and (b) to return 401 for an
-   auth failure. Their `x-request-id` response header identifies the request in their logs.
+1. **Ask them to return 401, not 500, for an auth failure.** A token the environment
+   cannot verify fails during GraphQL context creation and surfaces as
+   `HTTP 500 · Context creation failed: Unauthorized` with
+   `extensions.code = INTERNAL_SERVER_ERROR`. That reads like an outage on their side and
+   cost days here. Their `x-request-id` response header identifies the request in their logs.
 2. Which lock vendor do the properties use? The example bundles SEOS
    (`@virdee-inc/sdk-mobile-key-seos`); Dormakaba and SALTO are separate packages and
    would change which vendored xcframework ships here.
@@ -378,10 +393,14 @@ Blocked internally:
 
 Not yet verified:
 
-- **No flow has run end to end** — initialisation has never succeeded, so requirements,
-  CLEAR ID verification and the key have all gone untested.
-- **The digital key has never been exercised.** SEOS BLE does not work in the simulator —
-  it needs a physical device.
+- **Neither flow has been driven to completion.** ID verification reaches CLEAR's
+  `ASWebAuthenticationSession` sign-in and stops there; the key screen mounts and stays on
+  "Loading your mobile key…" because SEOS BLE needs a physical device. Everything up to
+  those two points works, including the outcome events coming back.
+- **Cancelling CLEAR's sign-in sheet killed the app on the simulator.** `EXC_GUARD` /
+  `XPC_EXIT_REASON_FAULT`, with a backtrace entirely inside `libxpc` and `BoardServices` —
+  no VirdeeKit or React frames. Almost certainly a simulator-only
+  `ASWebAuthenticationSession` fault, but confirm on a device before trusting that.
 - The framework has not been consumed from HRX itself, only from the harness here.
 - Only Debug has been run. The Release path — JS bundle read from inside the framework
   rather than from Metro — is untested.
