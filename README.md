@@ -118,9 +118,11 @@ A binary framework cannot inject these — they belong to HRX:
 - `Info.plist`: `NSBluetoothAlwaysUsageDescription`, `NSBluetoothPeripheralUsageDescription`,
   `NSLocationWhenInUseUsageDescription`, `NSCameraUsageDescription`, and
   `NSAppTransportSecurity` with `NSAllowsArbitraryLoads = false`
-- URL scheme `virdee-sdk` — CLEAR ID verification captures its OAuth redirect on
-  `virdee-sdk://clear`. `SceneDelegate` must route those URLs into React Native and
-  everything else to the existing `DeeplinkService`.
+- URL scheme `virdee-sdk`, declared in `CFBundleURLTypes`. CLEAR redirects to
+  `virdee-sdk://clear`, but `ASWebAuthenticationSession` captures that itself — there is
+  **no** `openURL` handler to write and nothing for `SceneDelegate` to route. Declaring
+  the scheme still matters: from iOS 17.4 the session fails if another installed app
+  claims it.
 - `UIBackgroundModes: bluetooth-central`, only for background lock communication
 - optionally `com.apple.developer.passkit.pass-presentation-suppression`, which
   suppresses the Wallet sheet during the BLE handshake
@@ -146,7 +148,6 @@ because rebuilding re-runs `VirdeeSDK.reset()/init()` and hangs on "Checking req
 
 ```
 Package.swift                     binaryTarget(path:) — no artifact hosting needed
-Sources/VirdeeKit/                thin wrapper carrying linker settings
 Artifacts/VirdeeKit.xcframework   the shipped binary (committed)
 Example/                          Virdee's native example + the VirdeeKit facade
   ios/VirdeeKit/                  VirdeeService, VirdeeServiceImpl, VirdeeRuntime,
@@ -221,8 +222,15 @@ Without them the app aborts the moment it launches:
 for hermes. Building and linking succeed either way — this only shows at runtime.
 
 All three are committed under `Artifacts/` and declared as separate binary targets. The
-`VirdeeKit` wrapper target depends on all three, so a consumer still writes one `import`
-and Xcode embeds all three by itself — no manual copying into the host app.
+product carries all three, so a consumer still writes one `import` and Xcode embeds all
+three by itself — no manual copying into the host app.
+
+There is deliberately **no wrapper target**. A `binaryTarget`'s name in `Package.swift` is
+only a SwiftPM label; the importable module name comes from the framework inside the
+xcframework, which is `VirdeeKit`. A wrapper named `VirdeeKit` collides with that, and
+`@_exported import VirdeeKitBinary` cannot resolve — there is no such module. 0.3.0
+shipped exactly that and no consumer could compile against it. `Scripts/verify-package.sh`
+exists to make that failure impossible to ship again; `release.sh` runs it.
 
 `build-xcframework.sh` re-copies both vendored frameworks from `node_modules` and `Pods`
 on every run. They must not drift from the binary that was just linked against them.
@@ -351,7 +359,9 @@ despite their README saying 16.2+). This repo pins **17.0** to match HRX.
   consumes it, launches, boots the React Native runtime and reaches Virdee's servers.
   That is the whole premise of this package, and it holds.
 - `Example/` is that app. It is not a decorative sample — it is the only thing proving
-  the facade works from the outside.
+  the facade works from the outside. Note what it does **not** prove: it compiles
+  VirdeeKit from source and never reads `Package.swift`, so it cannot catch a broken
+  manifest. `Scripts/verify-package.sh` is the check that does.
 - Against live production credentials the SDK initialises, `requirementsLoaded`,
   `mobileKeyAvailable` and `idVerificationRequired` all arrive, `presentIDVerification()`
   reaches CLEAR's sign-in, `presentMobileKey()` mounts the SEOS screen, and closing it

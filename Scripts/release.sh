@@ -72,7 +72,17 @@ if [ "$stamped" != "$VERSION" ]; then
   exit 1
 fi
 
-# --- 5. nothing else outstanding, and the tag is free ------------------------
+# --- 5. a consumer can actually build against the manifest -------------------
+# 0.3.0 shipped a Package.swift that no consumer could compile. Nothing caught it,
+# because every other check builds Example/, which never goes through Package.swift.
+echo "==> Verifying the package from a consumer's point of view"
+bash "$ROOT/Scripts/verify-package.sh" >/dev/null || {
+  echo "error: a consumer cannot build against this package." >&2
+  echo "       Run: bash Scripts/verify-package.sh" >&2
+  exit 1
+}
+
+# --- 6. nothing else outstanding, and the tag is free ------------------------
 [ -z "$(git status --porcelain)" ] || { echo "error: working tree is dirty" >&2; git status --short >&2; exit 1; }
 
 if git rev-parse "$VERSION" >/dev/null 2>&1; then
