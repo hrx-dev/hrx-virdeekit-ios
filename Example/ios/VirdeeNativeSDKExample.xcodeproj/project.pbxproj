@@ -88,7 +88,7 @@
 		B255DEABEB57F407F09DBD2B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B51BDFB291CE778DA8F4755A /* ContentView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B8122E7554EFAB3D218C690F /* libPods-VirdeeNativeSDKExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VirdeeNativeSDKExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D603CD4EC8460006DEDE907D /* hermes.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = hermes.xcframework; path = ../../Artifacts/hermes.xcframework; sourceTree = "<group>"; };
+		D603CD4EC8460006DEDE907D /* hermes.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = hermes.xcframework; path = Pods/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework; sourceTree = "<group>"; };
 		D7CA9EE1B63E528197711F86 /* MockAppleWalletModule.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockAppleWalletModule.swift; sourceTree = "<group>"; };
 		F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeFlowBridge.swift; path = VirdeeKit/VirdeeFlowBridge.swift; sourceTree = "<group>"; };
 		F219FA5F83BCB5B67DFF6E2D /* Pods-VirdeeKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeKit.debug.xcconfig"; path = "Target Support Files/Pods-VirdeeKit/Pods-VirdeeKit.debug.xcconfig"; sourceTree = "<group>"; };

@@ -17,17 +17,26 @@ import PackageDescription
 // "Library not loaded". Building and linking succeed either way — this only shows
 // at runtime, which is why it went unnoticed for a while.
 //
-// The consumer still imports one module: the wrapper target re-exports the binary
-// and carries the linker settings a binaryTarget cannot.
+// All three go in the product so the consumer links and embeds them by adding one
+// library. `import VirdeeKit` still resolves to a single module: SEOS and hermes
+// expose no Swift interface of their own.
+//
+// There is deliberately no wrapper target re-exporting the binary. A binaryTarget's
+// name here is only a SwiftPM label — the importable module name comes from the
+// framework inside the xcframework, which is `VirdeeKit`. A wrapper would both
+// collide with that name and be unable to import it.
 let package = Package(
     name: "VirdeeKit",
     platforms: [.iOS(.v17)],
     products: [
-        .library(name: "VirdeeKit", targets: ["VirdeeKit"])
+        .library(
+            name: "VirdeeKit",
+            targets: ["VirdeeKit", "SeosMobileKeysSDK", "hermes"]
+        )
     ],
     targets: [
         .binaryTarget(
-            name: "VirdeeKitBinary",
+            name: "VirdeeKit",
             path: "Artifacts/VirdeeKit.xcframework"
         ),
         // ASSA ABLOY SEOS, vendored by @virdee-inc/sdk-mobile-key-seos.
@@ -41,19 +50,6 @@ let package = Package(
         .binaryTarget(
             name: "hermes",
             path: "Artifacts/hermes.xcframework"
-        ),
-        .target(
-            name: "VirdeeKit",
-            dependencies: [
-                "VirdeeKitBinary",
-                "SeosMobileKeysSDK",
-                "hermes"
-            ],
-            path: "Sources/VirdeeKit",
-            linkerSettings: [
-                .linkedFramework("CoreBluetooth"),
-                .linkedFramework("AuthenticationServices")
-            ]
         )
     ]
 )
