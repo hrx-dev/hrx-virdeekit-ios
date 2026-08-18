@@ -22,6 +22,13 @@ trap 'rm -rf "$WORK"' EXIT
 
 DEST="${DEST:-generic/platform=iOS Simulator}"
 
+# For a path dependency SwiftPM takes the package identity from the directory name,
+# not from `name:` in the manifest. Hardcoding "virdee-ios-kit" here breaks the moment
+# someone clones into a differently named folder — which is exactly how this line got
+# written. Real consumers depend by URL, where the identity is the repo name, so this
+# only ever bit the check itself.
+IDENTITY="$(basename "$ROOT")"
+
 mkdir -p "$WORK/Consumer/Sources/Consumer"
 
 cat > "$WORK/Consumer/Package.swift" <<EOF
@@ -35,7 +42,7 @@ let package = Package(
     dependencies: [.package(path: "$ROOT")],
     targets: [
         .target(name: "Consumer",
-                dependencies: [.product(name: "VirdeeKit", package: "virdee-ios-kit")])
+                dependencies: [.product(name: "VirdeeKit", package: "$IDENTITY")])
     ]
 )
 EOF
