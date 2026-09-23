@@ -115,6 +115,15 @@ whichever queue produced the entry — do not assume main.
 
 A binary framework cannot inject these — they belong to HRX:
 
+- **`window` on the `AppDelegate`, even in a scene-based app.** React Native reads
+  `UIApplication.shared.delegate.window` in `RCTWindowSafeAreaProxy`, `RCTDeviceInfo`,
+  `RCTLogBoxView` and `RCTProfile`. A scene-based host keeps its window in the
+  `SceneDelegate`, so the first Virdee surface to mount kills the app with
+  `-[AppDelegate window]: unrecognized selector`. Declare it computed, returning the
+  foreground scene's key window — a stored `nil` answers the selector but reports zero
+  safe-area insets, and Virdee's screens then lay out under the notch. The harness cannot
+  catch this: it is a SwiftUI app with no `AppDelegate` and no scene manifest.
+
 - `Info.plist`: `NSBluetoothAlwaysUsageDescription`, `NSBluetoothPeripheralUsageDescription`,
   `NSLocationWhenInUseUsageDescription`, `NSCameraUsageDescription`, and
   `NSAppTransportSecurity` with `NSAllowsArbitraryLoads = false`
