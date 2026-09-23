@@ -2431,9 +2431,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@virdee-inc/sdk-core@npm:^4.0.0":
-  version: 4.0.1
-  resolution: "@virdee-inc/sdk-core@npm:4.0.1"
+"@virdee-inc/sdk-core@npm:^4.1.0":
+  version: 4.2.0
+  resolution: "@virdee-inc/sdk-core@npm:4.2.0"
   dependencies:
     "@apollo/client": "npm:^3.11.0"
     apollo-upload-client: "npm:^18.0.1"
@@ -2449,40 +2449,45 @@ __metadata:
     "@react-navigation/native": ">=7.0.0"
     "@react-navigation/native-stack": ">=7.0.0"
     react: "*"
-    react-native: ">=0.75.0"
+    react-native: ">=0.79.4"
     react-native-bluetooth-state-manager: ">=2.0.0"
     react-native-device-info: ">=10.0.0"
     react-native-nitro-modules: ">=0.20.0"
     react-native-safe-area-context: ">=4.0.0"
     react-native-svg: ">=13.0.0"
     react-native-webview: ">=13.0.0"
-  checksum: 10c0/202e6977083cd1f88e7207174b5a9fbec0836b23c27ea36c0a42927c2decea04a0c0760d6e722271f0e7127976ddc7d095ff52571b9892002d57325ec0f879ec
+  peerDependenciesMeta:
+    react-native-bluetooth-state-manager:
+      optional: true
+    react-native-nitro-modules:
+      optional: true
+  checksum: 10c0/efc6c67e073bbda15f0cc533953d6b37574cca895498d0ff560c379eee457f8a6daab3474a8823c91bb91cd75e8dcd072c51c1d35fabccb9af4762b6f6c58f2a
   languageName: node
   linkType: hard
 
-"@virdee-inc/sdk-idv-clear@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@virdee-inc/sdk-idv-clear@npm:1.0.1"
+"@virdee-inc/sdk-idv-clear@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "@virdee-inc/sdk-idv-clear@npm:1.2.0"
   peerDependencies:
     "@react-navigation/native": ">=7.0.0"
     "@react-navigation/native-stack": ">=7.0.0"
-    "@virdee-inc/sdk-core": ">=4.0.0"
+    "@virdee-inc/sdk-core": ">=4.1.0"
     react: "*"
-    react-native: ">=0.75.0"
-  checksum: 10c0/303da7f05f911c763768a45796acf5b62979cc888586c1593922b06ead913dd9c15dfba66b53ad9227df8c9bca6912a411c0d3ac6c9ffb1e3182c863564974d5
+    react-native: ">=0.79.4"
+  checksum: 10c0/9ec6ce8d2d6bffc4a01d8f72b7cab2ab224a1c33c7bee56f23f4dc31a9e6015cb222449caa3bea397016b49bccf2fe460515aef040a8d7617010dadd8ce62f6e
   languageName: node
   linkType: hard
 
-"@virdee-inc/sdk-mobile-key-seos@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "@virdee-inc/sdk-mobile-key-seos@npm:1.0.1"
+"@virdee-inc/sdk-mobile-key-seos@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@virdee-inc/sdk-mobile-key-seos@npm:1.1.1"
   peerDependencies:
     "@react-navigation/native": ">=7.0.0"
     "@react-navigation/native-stack": ">=7.0.0"
-    "@virdee-inc/sdk-core": ">=4.0.1"
+    "@virdee-inc/sdk-core": ">=4.1.0"
     react: "*"
-    react-native: ">=0.75.0"
-  checksum: 10c0/1865af1b288c21343698ada7f6219c840941c53bd37f6fffe5257f3df5f3170627008920ca33389d47101e73acae5fe4da877170a68f6d1f706c53acc7ebf0a4
+    react-native: ">=0.79.4"
+  checksum: 10c0/111338ae765092eb3b3445e218385afe44837de785223ff0721b81a06456c747594b9e04c9de9dbcf0f49bfcdc6e928c77c21f02064acd053063989bb71426a6
   languageName: node
   linkType: hard
 
@@ -6620,9 +6625,9 @@ __metadata:
     "@react-navigation/native": "npm:^7.1.6"
     "@react-navigation/native-stack": "npm:^7.3.10"
     "@types/react": "npm:^19.0.0"
-    "@virdee-inc/sdk-core": "npm:^4.0.0"
-    "@virdee-inc/sdk-idv-clear": "npm:^1.0.0"
-    "@virdee-inc/sdk-mobile-key-seos": "npm:^1.0.0"
+    "@virdee-inc/sdk-core": "npm:^4.1.0"
+    "@virdee-inc/sdk-idv-clear": "npm:^1.2.0"
+    "@virdee-inc/sdk-mobile-key-seos": "npm:^1.1.1"
     react: "npm:19.0.0"
     react-native: "npm:0.79.4"
     react-native-bluetooth-state-manager: "npm:^2.0.4"

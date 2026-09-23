@@ -1954,7 +1954,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - Yoga
   - SocketRocket (0.7.1)
-  - VirdeeSDKClearIDV (1.0.1):
+  - VirdeeSDKClearIDV (1.2.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1978,7 +1978,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - VirdeeSDKMobileKeySeos (1.0.1):
+  - VirdeeSDKMobileKeySeos (1.1.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2338,8 +2338,8 @@ SPEC CHECKSUMS:
   RNScreens: c5c07a86e4088ce92f0d3854082250dfa9c61f75
   RNSVG: d6c460b6c7ee63b92654fee1d9ede7a2768738ec
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  VirdeeSDKClearIDV: 1c25782d703a30631d95557f4a9158971b8aef74
-  VirdeeSDKMobileKeySeos: bed080488a5a2bb7e20d07cf917033570105fa87
+  VirdeeSDKClearIDV: 8a99e171deb69ddc3d4972c6aee80ea2cc73f6ef
+  VirdeeSDKMobileKeySeos: 6015e1899240a57232b6299f008f2dba0a74844b
   Yoga: 9cb1d1ce8507db40a1821da861bde88bf9fa060c
 
 PODFILE CHECKSUM: b95ecc53d93c42b74f20be71e259dc6d6f3989e1
