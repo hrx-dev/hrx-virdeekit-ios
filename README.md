@@ -36,6 +36,8 @@ virdee.events
             showKeyButton()                       // then call presentMobileKey()
         case .idVerification(.succeeded):
             markCheckInComplete()
+        case .mobileKeyDismissed, .idVerificationDismissed:
+            virdee.stop()                         // safe from inside the handler
         case .failedToStart(let message):
             report(message)
         default:
@@ -148,10 +150,25 @@ React Native never becomes "the app". The native side decides what to show and w
 3. On your button tap, `presentIDVerification()` / `presentMobileKey()` mount the
    `VirdeeClearIDV` / `VirdeeMobileKey` surfaces in overlay windows.
 4. Lifecycle callbacks arrive as `.idVerification(...)` / `.mobileKey(...)`.
+5. When the surface goes away, `.idVerificationDismissed` / `.mobileKeyDismissed` are
+   published **after** the overlay window is hidden and released. They mean "nothing
+   further will arrive for this flow" and are the right place to call `stop()`.
 
 All surfaces share one JS runtime, so the `VirdeeSDK` singleton and its access-grant
 store are shared. `refresh()` re-arms the existing controller; it never rebuilds it,
 because rebuilding re-runs `VirdeeSDK.reset()/init()` and hangs on "Checking requirements…".
+
+### Stopping
+
+`stop()` may be called from inside an `events` handler, including the handler for the
+event that ended the flow. It detaches the bridge first, unmounts the surfaces, and only
+then releases the runtime — React Native needs several run-loop turns to finish
+unmounting, and releasing `RCTReactNativeFactory` mid-teardown crashes inside
+`Scheduler`/`UIManager` with *attempt to insert nil object*. A single
+`DispatchQueue.main.async` hop does **not** avoid that; the ordering is what does.
+
+It is idempotent, and `start(session:)` called again before the runtime has been
+released reclaims it instead of rebuilding. `stop()` itself publishes no events.
 
 ## Repo layout
 

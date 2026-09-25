@@ -27,6 +27,19 @@ public final class VirdeeServiceImpl: VirdeeService {
     private var mobileKeyWindow: UIWindow?
     private var pendingIDVAccessGrantId: String?
 
+    /// Releasing `RCTReactNativeFactory` while React Native is still unmounting crashes
+    /// in its own destructors — `Scheduler::~Scheduler` → `UIManager::~UIManager` →
+    /// `-[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object`.
+    /// The teardown spans several run-loop turns, so one `DispatchQueue.main.async` hop
+    /// is not enough. Held so `start(session:)` can cancel it and reuse the warm runtime.
+    private var pendingShutdown: DispatchWorkItem?
+
+    /// `VirdeeFlowBridge`'s sinks are static — React Native instantiates the module
+    /// itself, so it cannot hold a service reference. That makes the last service to
+    /// wire itself the owner; only the owner may detach, or a second instance would
+    /// silently unhook the first.
+    private static weak var bridgeOwner: VirdeeServiceImpl?
+
     public private(set) var requirements: [VirdeeRequirement] = []
 
     public var events: AnyPublisher<VirdeeEvent, Never> { subject.eraseToAnyPublisher() }
@@ -39,12 +52,27 @@ public final class VirdeeServiceImpl: VirdeeService {
     public init(configuration: VirdeeConfiguration = .default) {
         VirdeeLog.shared.configure(configuration)
         VirdeeLog.shared.info("service", "VirdeeKit \(VirdeeKitVersion.version) (sdk-core \(VirdeeKitVersion.sdkCore))")
-        wireBridge()
+    }
+
+    deinit {
+        detachBridge()
     }
 
     // MARK: - Lifecycle
 
     public func start(session: VirdeeSession) {
+        // A stop() may still be waiting to release the runtime. Reclaim it instead of
+        // letting it die under the session we are starting.
+        if let pending = pendingShutdown {
+            VirdeeLog.shared.debug("service", "reclaiming the runtime from a pending stop")
+            pending.cancel()
+            pendingShutdown = nil
+        }
+
+        // Wired here rather than in init: stop() detaches, so a service that is started
+        // again has to hook itself back up.
+        wireBridge()
+
         self.session = session
         VirdeeLog.shared.info(
             "service",
@@ -89,16 +117,52 @@ public final class VirdeeServiceImpl: VirdeeService {
         VirdeeRestartEmitter.emitRestart()
     }
 
+    /// Order matters and is the whole fix. See `VirdeeService.stop()` for the contract.
     public func stop() {
-        VirdeeLog.shared.info("service", "stop — tearing down surfaces and the JS runtime")
+        guard pendingShutdown == nil else {
+            VirdeeLog.shared.debug("service", "stop — already tearing down, ignoring")
+            return
+        }
+        guard Self.bridgeOwner === self || session != nil || controllerView != nil
+                || clearIDVWindow != nil || mobileKeyWindow != nil else {
+            VirdeeLog.shared.debug("service", "stop — nothing to tear down")
+            return
+        }
+
+        VirdeeLog.shared.info("service", "stop — detaching the bridge, then unmounting")
+
+        // 1. Detach first. The host may be calling us from inside an event handler, and
+        //    JS keeps talking during teardown; anything arriving now would mutate state
+        //    we are in the middle of clearing.
+        detachBridge()
+
+        // 2. Unmount. Dropping the root views is what starts React Native's own
+        //    teardown, and it has to happen before the runtime goes.
         dismiss(&clearIDVWindow)
         dismiss(&mobileKeyWindow)
         controllerView?.removeFromSuperview()
         controllerView = nil
+
         requirements = []
         session = nil
-        runtime.shutdown()
+        pendingIDVAccessGrantId = nil
+
+        // 3. Release the runtime only once React Native has drained its unmount work.
+        //    The delay is empirical: a single run-loop hop is measurably not enough, and
+        //    RCTReactNativeFactory exposes no "surfaces are gone" signal to wait on.
+        let shutdown = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.pendingShutdown = nil
+            VirdeeLog.shared.info("service", "releasing the JS runtime")
+            self.runtime.shutdown()
+        }
+        pendingShutdown = shutdown
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.runtimeReleaseDelay, execute: shutdown)
     }
+
+    /// Long enough for React Native to finish unmounting, short enough that a guest
+    /// leaving the flow does not keep the runtime alive in any meaningful way.
+    private static let runtimeReleaseDelay: TimeInterval = 0.5
 
     // MARK: - Presentation
 
@@ -178,6 +242,8 @@ public final class VirdeeServiceImpl: VirdeeService {
     // MARK: - Bridge wiring
 
     private func wireBridge() {
+        Self.bridgeOwner = self
+
         VirdeeFlowBridge.onFailedToStart = { [weak self] code, message in
             VirdeeLog.shared.error("service", "SDK failed to start [\(code)] \(message)")
             self?.subject.send(.failedToStart(message: "[\(code)] \(message)"))
@@ -213,14 +279,24 @@ public final class VirdeeServiceImpl: VirdeeService {
             self?.subject.send(.mobileKeyAvailable)
         }
 
+        // The dismissed events are published only after dismiss() has returned, so a host
+        // that calls stop() on them is acting on a surface that is already gone.
         VirdeeFlowBridge.onCloseClearIDV = { [weak self] in
             guard let self else { return }
+            let wasPresented = self.clearIDVWindow != nil
             self.dismiss(&self.clearIDVWindow)
+            guard wasPresented else { return }
+            VirdeeLog.shared.info("service", "CLEAR ID verification dismissed")
+            self.subject.send(.idVerificationDismissed)
         }
 
         VirdeeFlowBridge.onCloseMobileKey = { [weak self] in
             guard let self else { return }
+            let wasPresented = self.mobileKeyWindow != nil
             self.dismiss(&self.mobileKeyWindow)
+            guard wasPresented else { return }
+            VirdeeLog.shared.info("service", "mobile key dismissed")
+            self.subject.send(.mobileKeyDismissed)
         }
 
         VirdeeFlowBridge.onFlowEvent = { [weak self] flow, event, payload in
@@ -248,6 +324,21 @@ public final class VirdeeServiceImpl: VirdeeService {
                 VirdeeLog.shared.warning("flow", "unknown flow '\(flow)' — event dropped")
             }
         }
+    }
+
+    /// Only the owner detaches: a second service that wired itself after us now holds the
+    /// sinks, and clearing them here would silently unhook it.
+    private func detachBridge() {
+        guard Self.bridgeOwner === self else { return }
+        Self.bridgeOwner = nil
+
+        VirdeeFlowBridge.onFailedToStart = nil
+        VirdeeFlowBridge.onRequirements = nil
+        VirdeeFlowBridge.onShowVerifyId = nil
+        VirdeeFlowBridge.onShowMobileKeyButton = nil
+        VirdeeFlowBridge.onCloseClearIDV = nil
+        VirdeeFlowBridge.onCloseMobileKey = nil
+        VirdeeFlowBridge.onFlowEvent = nil
     }
 
     private func markIDVerificationComplete() {

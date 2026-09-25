@@ -51,6 +51,8 @@ public enum VirdeeEvent {
   case idVerification(VirdeeKit.VirdeeFlowOutcome)
   case mobileKey(VirdeeKit.VirdeeFlowOutcome)
   case failedToStart(message: Swift.String)
+  case idVerificationDismissed
+  case mobileKeyDismissed
 }
 public protocol VirdeeService : AnyObject {
   var events: Combine.AnyPublisher<VirdeeKit.VirdeeEvent, Swift.Never> { get }
@@ -74,12 +76,12 @@ final public class VirdeeServiceImpl : VirdeeKit.VirdeeService {
     set
   }
   public init(configuration: VirdeeKit.VirdeeConfiguration = .default)
+  @objc deinit
   final public func start(session: VirdeeKit.VirdeeSession)
   final public func refresh()
   final public func stop()
   final public func presentIDVerification()
   final public func presentMobileKey()
-  @objc deinit
 }
 public enum VirdeeKitVersion {
   public static let version: Swift.String
