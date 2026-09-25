@@ -73,6 +73,22 @@ public enum VirdeeEvent {
     case mobileKey(VirdeeFlowOutcome)
     /// The SDK could not start (bad credentials, no network, expired grant).
     case failedToStart(message: String)
+
+    /// CLEAR ID verification is off screen and nothing further will arrive for it.
+    ///
+    /// Sent *after* the overlay window is hidden and released, so by the time the host
+    /// sees this the surface is gone. Always preceded by an `.idVerification(_)` outcome
+    /// describing *how* it ended; this one only says the screen is down.
+    ///
+    /// Not sent when the host calls `stop()` — the host initiated that and already knows.
+    case idVerificationDismissed
+
+    /// The digital key screen is off screen and nothing further will arrive for it.
+    ///
+    /// Same guarantees as `idVerificationDismissed`. This is the only signal the host
+    /// gets that the mobile key flow is over: unlike ID verification, which is followed
+    /// by `.mobileKeyAvailable`, nothing else marks the end of it.
+    case mobileKeyDismissed
 }
 
 // MARK: - Service
@@ -109,5 +125,17 @@ public protocol VirdeeService: AnyObject {
     func presentMobileKey()
 
     /// Tears down every surface and releases the JS runtime.
+    ///
+    /// **Safe to call from inside an `events` handler**, including the handler for the
+    /// event that ended the flow. Bridge callbacks are detached first, so nothing else
+    /// arrives afterwards, and the JS runtime is released a moment later — React Native
+    /// needs several run-loop turns to finish unmounting, and releasing it mid-teardown
+    /// crashes inside `Scheduler`/`UIManager`.
+    ///
+    /// Idempotent: calling it twice, or without a preceding `start(session:)`, does
+    /// nothing. Calling `start(session:)` again before the runtime has been released
+    /// cancels the release and reuses the warm runtime.
+    ///
+    /// No `events` are published as a result of this call.
     func stop()
 }
