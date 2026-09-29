@@ -879,6 +879,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
 				PRODUCT_NAME = VirdeeKit;
 				SDKROOT = iphoneos;
@@ -925,6 +926,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
+				MARKETING_VERSION = 0.5.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
 				PRODUCT_NAME = VirdeeKit;
 				SDKROOT = iphoneos;

@@ -2,6 +2,27 @@
 
 Versions are git tags; SwiftPM resolves by tag. See README for the release procedure.
 
+## 0.5.1
+
+Fixes a TestFlight upload rejection. `VirdeeKit.framework`'s `Info.plist` had no
+`CFBundleShortVersionString`, and App Store Connect validates every embedded framework:
+
+```
+ERROR 90057: The bundle 'Payload/Hard Rock.app/Frameworks/VirdeeKit.framework'
+is missing plist key ... CFBundleShortVersionString
+```
+
+`GENERATE_INFOPLIST_FILE` only emits that key when `MARKETING_VERSION` is set, and it
+was never set on the framework target — only on the example app. `CFBundleVersion` was
+present, which is why nothing looked wrong locally.
+
+Nothing in a build or an archive fails on this; it surfaces only at upload, after the
+whole pipeline has run. `release.sh` now refuses to tag unless both keys are present in
+both slices and `CFBundleShortVersionString` matches the tag.
+
+No API change. All three shipped frameworks were checked: `SeosMobileKeysSDK` (10.0.2)
+and `hermes` (0.12.0) already carried both keys.
+
 ## 0.5.0
 
 ### `stop()` is safe to call from an event handler

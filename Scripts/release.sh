@@ -72,6 +72,40 @@ if [ "$stamped" != "$VERSION" ]; then
   exit 1
 fi
 
+# --- 4b. the framework Info.plist satisfies App Store validation -------------
+# TestFlight rejects the whole app if an embedded framework has no
+# CFBundleShortVersionString:
+#
+#   ERROR 90057: The bundle 'Payload/Hard Rock.app/Frameworks/VirdeeKit.framework'
+#   is missing plist key ... CFBundleShortVersionString
+#
+# GENERATE_INFOPLIST_FILE only emits that key when MARKETING_VERSION is set, and it
+# was not, so the key was simply absent. Nothing in a normal build or archive fails
+# on this — it surfaces only at upload, after the whole pipeline has run.
+for slice in ios-arm64 ios-arm64_x86_64-simulator; do
+  plist="$FRAMEWORK/$slice/VirdeeKit.framework/Info.plist"
+  [ -f "$plist" ] || continue
+
+  short=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$plist" 2>/dev/null || true)
+  bundle=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$plist" 2>/dev/null || true)
+
+  if [ -z "$short" ]; then
+    echo "error: $slice Info.plist has no CFBundleShortVersionString." >&2
+    echo "       Set MARKETING_VERSION on the VirdeeKit target and rebuild." >&2
+    exit 1
+  fi
+  if [ -z "$bundle" ]; then
+    echo "error: $slice Info.plist has no CFBundleVersion." >&2
+    echo "       Set CURRENT_PROJECT_VERSION on the VirdeeKit target and rebuild." >&2
+    exit 1
+  fi
+  if [ "$short" != "$VERSION" ]; then
+    echo "error: $slice reports CFBundleShortVersionString $short, tagging $VERSION." >&2
+    echo "       MARKETING_VERSION on the VirdeeKit target is out of step." >&2
+    exit 1
+  fi
+done
+
 # --- 5. a consumer can actually build against the manifest -------------------
 # 0.3.0 shipped a Package.swift that no consumer could compile. Nothing caught it,
 # because every other check builds Example/, which never goes through Package.swift.
