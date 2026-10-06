@@ -2,6 +2,68 @@
 
 Versions are git tags; SwiftPM resolves by tag. See README for the release procedure.
 
+## 0.6.0
+
+### The JS runtime is never released
+
+0.5.0 made `stop()` release `RCTReactNativeFactory` after a short delay instead of
+immediately. That stopped the crash at teardown and moved it to the next entry into the
+flow. Two signatures in production (1.0.3/124):
+
+```
+nitro::install → HybridObjectPrototype::createPrototype
+               → HermesRuntimeImpl::createFunctionFromHostFunction
+
+-[RCTNetworking prioritizedHandlers] → +[NSArray arrayWithObjects:count:]   (nil handler)
+  concurrently with -[RCTInstance invalidate] → ~HermesRuntimeImpl on the JS thread
+```
+
+`react-native-nitro-modules` keeps process-global static caches keyed by the raw
+`jsi::Runtime*` — `PropNameIDCache`, `CommonGlobals`, `Prototype` — and clears none of
+them, so a runtime allocated at a recycled address inherits references into a freed one.
+The second crash is plainer: in-flight requests outlive `invalidate`.
+
+Both have one cause: destroying and recreating the runtime in a live process. Virdee
+confirmed (Oct 2026) that the SDK is meant to live for the whole app, that rebooting the
+runtime is expensive and discouraged, and that there is no separate "end session" API.
+
+So `VirdeeRuntime` has no `shutdown()` any more. `stop()` keeps the ordering introduced
+in 0.5.0 — detach the bridge, unmount every surface, clear state — and leaves the runtime
+running. A later `start(session:)` mounts a fresh controller; `index.js` then runs
+`if (isInitialized()) await reset()` before `init()` with the new credentials, which is
+the sequence Virdee prescribe for re-entry (the `reset()` touches async storage, hence
+the await).
+
+This is **not** a return to 0.4.0: that crash was caused by releasing the factory, and
+there is no release left to make.
+
+### `startTimeout`
+
+```swift
+VirdeeConfiguration(logLevel: .error, startTimeout: 20)   // 0 disables
+```
+
+`start(session:)` arms a watchdog; the first `.requirementsLoaded` or `.failedToStart`
+disarms it. If neither arrives, the kit publishes `.failedToStart` itself.
+
+Re-entry now re-initialises inside a warm runtime, and a `reset()` that never returns
+throws nothing — the host would sit on a spinner with no event at all. This turns that
+into one it already handles. The new parameter sits between the two existing ones, so
+calls written against 0.5.x keep compiling.
+
+### Upgrading
+
+No API removed, no event added. Hosts that already pair `start`/`stop` need no change.
+Worth re-checking: nothing may assume `stop()` frees memory or resets JS state, and
+`.failedToStart` can now arrive from the timeout — later, and without an SDK error
+behind it.
+
+### Not verified
+
+Re-entering a flow twice with different reservations — the case that crashes today — has
+not been run against this build. It needs live credentials, and the mobile key needs a
+physical device for BLE.
+
 ## 0.5.1
 
 Fixes a TestFlight upload rejection. `VirdeeKit.framework`'s `Info.plist` had no
