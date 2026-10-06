@@ -113,7 +113,8 @@ public struct VirdeeLogEntry : Swift.Sendable {
 public struct VirdeeConfiguration {
   public var logLevel: VirdeeKit.VirdeeLogLevel
   public var logHandler: (@Sendable (VirdeeKit.VirdeeLogEntry) -> Swift.Void)?
-  public init(logLevel: VirdeeKit.VirdeeLogLevel = .error, logHandler: (@Sendable (VirdeeKit.VirdeeLogEntry) -> Swift.Void)? = nil)
+  public var startTimeout: Foundation.TimeInterval
+  public init(logLevel: VirdeeKit.VirdeeLogLevel = .error, startTimeout: Foundation.TimeInterval = 20, logHandler: (@Sendable (VirdeeKit.VirdeeLogEntry) -> Swift.Void)? = nil)
   public static let `default`: VirdeeKit.VirdeeConfiguration
 }
 extension VirdeeKit.VirdeeEnvironment : Swift.Equatable {}

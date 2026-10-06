@@ -17,7 +17,7 @@ public enum VirdeeKitVersion {
 
     /// VirdeeKit's own semver — the version of the `VirdeeService` contract,
     /// not of the Virdee SDK inside it.
-    public static let version = "0.5.1"
+    public static let version = "0.6.0"
 
     /// The `@virdee-inc/sdk-core` release this binary was built against.
     public static let sdkCore = "4.2.0"

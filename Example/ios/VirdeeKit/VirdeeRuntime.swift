@@ -55,10 +55,23 @@ final class VirdeeRuntime {
         return view
     }
 
-    func shutdown() {
-        factory = nil
-        delegate = nil
-    }
+    // There is deliberately no shutdown(). Releasing RCTReactNativeFactory and building
+    // a second runtime in the same process crashed in production, two ways:
+    //
+    //   nitro::install → HybridObjectPrototype::createPrototype
+    //                  → HermesRuntimeImpl::createFunctionFromHostFunction
+    //
+    //   -[RCTNetworking prioritizedHandlers] → +[NSArray arrayWithObjects:count:]
+    //   (nil handler) while the JS thread ran -[RCTInstance invalidate]
+    //
+    // react-native-nitro-modules keeps process-global static caches keyed by the raw
+    // `jsi::Runtime*` — PropNameIDCache, CommonGlobals, Prototype — and clears none of
+    // them, so a runtime allocated at a recycled address inherits references into a
+    // freed one. The second crash is plainer: in-flight requests outlive invalidate.
+    //
+    // Virdee confirmed (Oct 2026) that the SDK is meant to live for the whole app and
+    // that there is no supported way to end a session other than unmounting surfaces.
+    // Ending a flow is VirdeeServiceImpl.stop(); the runtime stays.
 }
 
 private final class FactoryDelegate: RCTDefaultReactNativeFactoryDelegate {
