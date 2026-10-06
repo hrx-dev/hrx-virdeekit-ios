@@ -124,17 +124,16 @@ public protocol VirdeeService: AnyObject {
     /// Presents the digital key screen. Call after `.mobileKeyAvailable`.
     func presentMobileKey()
 
-    /// Tears down every surface and releases the JS runtime.
+    /// Ends the session: detaches the bridge and unmounts every Virdee surface.
+    ///
+    /// **The JS runtime is deliberately kept alive** for the lifetime of the process.
+    /// Virdee confirmed the SDK is meant to live that long, and tearing React Native
+    /// down and building it again crashed in production — see CHANGELOG 0.6.0. A later
+    /// `start(session:)` reuses the warm runtime, which also makes it faster.
     ///
     /// **Safe to call from inside an `events` handler**, including the handler for the
-    /// event that ended the flow. Bridge callbacks are detached first, so nothing else
-    /// arrives afterwards, and the JS runtime is released a moment later — React Native
-    /// needs several run-loop turns to finish unmounting, and releasing it mid-teardown
-    /// crashes inside `Scheduler`/`UIManager`.
-    ///
-    /// Idempotent: calling it twice, or without a preceding `start(session:)`, does
-    /// nothing. Calling `start(session:)` again before the runtime has been released
-    /// cancels the release and reuses the warm runtime.
+    /// event that ended the flow. Idempotent: calling it twice, or without a preceding
+    /// `start(session:)`, does nothing.
     ///
     /// No `events` are published as a result of this call.
     func stop()

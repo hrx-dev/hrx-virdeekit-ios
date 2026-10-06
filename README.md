@@ -161,14 +161,28 @@ because rebuilding re-runs `VirdeeSDK.reset()/init()` and hangs on "Checking req
 ### Stopping
 
 `stop()` may be called from inside an `events` handler, including the handler for the
-event that ended the flow. It detaches the bridge first, unmounts the surfaces, and only
-then releases the runtime — React Native needs several run-loop turns to finish
-unmounting, and releasing `RCTReactNativeFactory` mid-teardown crashes inside
-`Scheduler`/`UIManager` with *attempt to insert nil object*. A single
-`DispatchQueue.main.async` hop does **not** avoid that; the ordering is what does.
+event that ended the flow. It detaches the bridge first, then unmounts every surface.
+It is idempotent and publishes no events.
 
-It is idempotent, and `start(session:)` called again before the runtime has been
-released reclaims it instead of rebuilding. `stop()` itself publishes no events.
+**The JS runtime is never released.** Virdee confirmed the SDK is meant to live for the
+whole app, and tearing React Native down and building it again crashed in production two
+different ways — nitro's process-global caches are keyed by the raw `jsi::Runtime*` and
+never cleared, and in-flight requests outlive `RCTInstance invalidate`. See CHANGELOG
+0.6.0. A later `start(session:)` reuses the warm runtime, mounts a fresh controller, and
+the SDK re-initialises itself with `reset()` then `init()`.
+
+The cost is one runtime held for the lifetime of any process that opened a Virdee flow.
+That is the supported shape, not a workaround.
+
+### When the SDK goes quiet
+
+Re-entry re-initialises inside a warm runtime, and `reset()` touches async storage. If it
+never returns, nothing throws — so `start(session:)` arms a watchdog and publishes
+`.failedToStart` when neither requirements nor a failure arrive in time:
+
+```swift
+VirdeeConfiguration(logLevel: .error, startTimeout: 20)   // seconds; 0 disables
+```
 
 ## Repo layout
 

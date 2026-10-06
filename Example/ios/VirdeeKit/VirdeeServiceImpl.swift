@@ -27,12 +27,11 @@ public final class VirdeeServiceImpl: VirdeeService {
     private var mobileKeyWindow: UIWindow?
     private var pendingIDVAccessGrantId: String?
 
-    /// Releasing `RCTReactNativeFactory` while React Native is still unmounting crashes
-    /// in its own destructors — `Scheduler::~Scheduler` → `UIManager::~UIManager` →
-    /// `-[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object`.
-    /// The teardown spans several run-loop turns, so one `DispatchQueue.main.async` hop
-    /// is not enough. Held so `start(session:)` can cancel it and reuse the warm runtime.
-    private var pendingShutdown: DispatchWorkItem?
+    /// `start(session:)` arms this; the first `.requirementsLoaded` or `.failedToStart`
+    /// disarms it. Without it a `reset()` that never returns leaves the host on a
+    /// spinner with no event — see `VirdeeConfiguration.startTimeout`.
+    private var startWatchdog: DispatchWorkItem?
+    private let startTimeout: TimeInterval
 
     /// `VirdeeFlowBridge`'s sinks are static — React Native instantiates the module
     /// itself, so it cannot hold a service reference. That makes the last service to
@@ -50,6 +49,7 @@ public final class VirdeeServiceImpl: VirdeeService {
     }
 
     public init(configuration: VirdeeConfiguration = .default) {
+        self.startTimeout = configuration.startTimeout
         VirdeeLog.shared.configure(configuration)
         VirdeeLog.shared.info("service", "VirdeeKit \(VirdeeKitVersion.version) (sdk-core \(VirdeeKitVersion.sdkCore))")
     }
@@ -61,19 +61,12 @@ public final class VirdeeServiceImpl: VirdeeService {
     // MARK: - Lifecycle
 
     public func start(session: VirdeeSession) {
-        // A stop() may still be waiting to release the runtime. Reclaim it instead of
-        // letting it die under the session we are starting.
-        if let pending = pendingShutdown {
-            VirdeeLog.shared.debug("service", "reclaiming the runtime from a pending stop")
-            pending.cancel()
-            pendingShutdown = nil
-        }
-
         // Wired here rather than in init: stop() detaches, so a service that is started
         // again has to hook itself back up.
         wireBridge()
 
         self.session = session
+        armStartWatchdog()
         VirdeeLog.shared.info(
             "service",
             "start — grant \(Redact.id(session.accessGrantId)), env \(session.environment.rawValue)"
@@ -98,6 +91,7 @@ public final class VirdeeServiceImpl: VirdeeService {
         ) else {
             let message = "Could not create the \(Surface.controller) surface"
             VirdeeLog.shared.error("service", message)
+            disarmStartWatchdog()
             subject.send(.failedToStart(message: message))
             return
         }
@@ -117,12 +111,8 @@ public final class VirdeeServiceImpl: VirdeeService {
         VirdeeRestartEmitter.emitRestart()
     }
 
-    /// Order matters and is the whole fix. See `VirdeeService.stop()` for the contract.
+    /// Ends the session. The JS runtime deliberately survives — see `VirdeeRuntime`.
     public func stop() {
-        guard pendingShutdown == nil else {
-            VirdeeLog.shared.debug("service", "stop — already tearing down, ignoring")
-            return
-        }
         guard Self.bridgeOwner === self || session != nil || controllerView != nil
                 || clearIDVWindow != nil || mobileKeyWindow != nil else {
             VirdeeLog.shared.debug("service", "stop — nothing to tear down")
@@ -132,12 +122,14 @@ public final class VirdeeServiceImpl: VirdeeService {
         VirdeeLog.shared.info("service", "stop — detaching the bridge, then unmounting")
 
         // 1. Detach first. The host may be calling us from inside an event handler, and
-        //    JS keeps talking during teardown; anything arriving now would mutate state
-        //    we are in the middle of clearing.
+        //    JS keeps talking while surfaces come down; anything arriving now would
+        //    mutate state we are in the middle of clearing.
         detachBridge()
+        disarmStartWatchdog()
 
-        // 2. Unmount. Dropping the root views is what starts React Native's own
-        //    teardown, and it has to happen before the runtime goes.
+        // 2. Unmount every surface. The next start(session:) mounts a fresh controller,
+        //    and index.js then does `if (isInitialized()) await reset()` before `init()`
+        //    with the new credentials — the sequence Virdee prescribe for re-entry.
         dismiss(&clearIDVWindow)
         dismiss(&mobileKeyWindow)
         controllerView?.removeFromSuperview()
@@ -146,23 +138,30 @@ public final class VirdeeServiceImpl: VirdeeService {
         requirements = []
         session = nil
         pendingIDVAccessGrantId = nil
-
-        // 3. Release the runtime only once React Native has drained its unmount work.
-        //    The delay is empirical: a single run-loop hop is measurably not enough, and
-        //    RCTReactNativeFactory exposes no "surfaces are gone" signal to wait on.
-        let shutdown = DispatchWorkItem { [weak self] in
-            guard let self else { return }
-            self.pendingShutdown = nil
-            VirdeeLog.shared.info("service", "releasing the JS runtime")
-            self.runtime.shutdown()
-        }
-        pendingShutdown = shutdown
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.runtimeReleaseDelay, execute: shutdown)
     }
 
-    /// Long enough for React Native to finish unmounting, short enough that a guest
-    /// leaving the flow does not keep the runtime alive in any meaningful way.
-    private static let runtimeReleaseDelay: TimeInterval = 0.5
+    // MARK: - Start watchdog
+
+    private func armStartWatchdog() {
+        disarmStartWatchdog()
+        guard startTimeout > 0 else { return }
+
+        let watchdog = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.startWatchdog = nil
+            let message = "The SDK did not report within \(Int(self.startTimeout))s of start — "
+                + "it may be stuck re-initialising in the warm runtime"
+            VirdeeLog.shared.error("service", message)
+            self.subject.send(.failedToStart(message: message))
+        }
+        startWatchdog = watchdog
+        DispatchQueue.main.asyncAfter(deadline: .now() + startTimeout, execute: watchdog)
+    }
+
+    private func disarmStartWatchdog() {
+        startWatchdog?.cancel()
+        startWatchdog = nil
+    }
 
     // MARK: - Presentation
 
@@ -246,11 +245,13 @@ public final class VirdeeServiceImpl: VirdeeService {
 
         VirdeeFlowBridge.onFailedToStart = { [weak self] code, message in
             VirdeeLog.shared.error("service", "SDK failed to start [\(code)] \(message)")
+            self?.disarmStartWatchdog()
             self?.subject.send(.failedToStart(message: "[\(code)] \(message)"))
         }
 
         VirdeeFlowBridge.onRequirements = { [weak self] summary in
             guard let self else { return }
+            self.disarmStartWatchdog()
             VirdeeLog.shared.debug("bridge", "setRequirements \(summary)")
             let raw = summary["requirements"] as? [[String: Any]] ?? []
             self.requirements = raw.map {

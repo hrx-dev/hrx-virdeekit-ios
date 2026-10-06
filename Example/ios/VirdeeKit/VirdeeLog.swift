@@ -56,11 +56,32 @@ public struct VirdeeConfiguration {
     /// Called on whichever queue produced the entry — do not assume main.
     public var logHandler: (@Sendable (VirdeeLogEntry) -> Void)?
 
+    /// How long `start(session:)` waits for the SDK to report before giving up and
+    /// publishing `.failedToStart`.
+    ///
+    /// Re-entering a flow re-initialises the SDK inside the already-warm runtime:
+    /// `reset()`, which touches async storage, and then `init()`. Virdee confirmed
+    /// that sequence as the supported one, but if `reset()` never returns there is no
+    /// error to surface — the host would sit on a spinner forever. This turns that
+    /// into an event it can act on.
+    ///
+    /// Set to `0` to disable. Measured from the call to `start(session:)`, and
+    /// cancelled by the first `.requirementsLoaded` or `.failedToStart`.
+    public var startTimeout: TimeInterval
+
+    /// `startTimeout` sits between the two existing parameters so that calls written
+    /// against 0.5.x — which label both of theirs — keep compiling untouched.
+    ///
+    /// On a warm runtime the SDK reported requirements about four seconds after
+    /// `start(session:)`, so 20 leaves room for a slow network without leaving a
+    /// guest staring at a spinner.
     public init(
         logLevel: VirdeeLogLevel = .error,
+        startTimeout: TimeInterval = 20,
         logHandler: (@Sendable (VirdeeLogEntry) -> Void)? = nil
     ) {
         self.logLevel = logLevel
+        self.startTimeout = startTimeout
         self.logHandler = logHandler
     }
 
