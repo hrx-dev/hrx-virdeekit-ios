@@ -38,7 +38,7 @@ import {
   IDVerification,
   useAccessGrant,
 } from '@virdee-inc/sdk-core';
-import { MobileKey } from '@virdee-inc/sdk-mobile-key-seos';
+import { MobileKey, useMobileKey } from '@virdee-inc/sdk-mobile-key-seos';
 import { ClearIDVerification } from '@virdee-inc/sdk-idv-clear';
 
 // RedBox can't present in the transparent overlay windows the native side uses.
@@ -139,6 +139,12 @@ const bridge = {
       payload ?? ''
     );
     VirdeeFlowBridge?.onVirdeeEvent?.(flow, event, payload ?? {});
+  },
+  // Headless mobile key: one snapshot of useMobileKey's state per change, for a
+  // host that draws the screen itself. The VirdeeMobileKey surface does not use
+  // this — it ships Virdee's own UI and reports through `emit` instead.
+  mobileKeyState: (state) => {
+    VirdeeFlowBridge?.mobileKeyState?.(state ?? {});
   },
 };
 
@@ -337,9 +343,116 @@ function VirdeeMobileKey({ accessGrantId }) {
 }
 
 // -----------------------------------------------------------------------------
+// Surface 4: SEOS mobile key, headless — the host draws its own screen
+// -----------------------------------------------------------------------------
+
+/**
+ * Same lifecycle as VirdeeMobileKey, with none of the UI. Mounted 1x1 and
+ * transparent; every state change is pushed to native, and native drives it back
+ * through the `VirdeeMobileKeyCommand` event.
+ *
+ * Virdee require that only ONE useMobileKey consumer is mounted per access grant,
+ * so VirdeeServiceImpl refuses to run this and the VirdeeMobileKey overlay at the
+ * same time.
+ */
+function VirdeeMobileKeyHeadless({ accessGrantId, autoActivate, unlockTimeout }) {
+  // The hook's state carries `errorMessage` but not the code, and the host needs
+  // the code to tell "Bluetooth is off" from "permission denied" — different
+  // screens in the design. onError is the only place it appears.
+  const errorCodeRef = useRef(null);
+
+  const key = useMobileKey({
+    accessGrantId,
+    autoInitialize: true,
+    autoActivate: !!autoActivate,
+    unlockTimeoutInSeconds: unlockTimeout ?? 10,
+    onSuccess: () => {
+      errorCodeRef.current = null;
+      console.log('[VirdeeMobileKeyHeadless] onSuccess');
+    },
+    onError: (error) => {
+      errorCodeRef.current = error?.type ?? error?.code ?? 'UNKNOWN';
+      console.log('[VirdeeMobileKeyHeadless] onError', error);
+    },
+  });
+
+  const {
+    status,
+    isRecovering,
+    errorMessage,
+    errorCount,
+    statusMessage,
+    unlockRemainingSeconds,
+    unlockProgress,
+    resource,
+  } = key;
+
+  // One snapshot per change. Sent on mount too, so the host has something to
+  // render before the first transition.
+  useEffect(() => {
+    bridge.mobileKeyState({
+      status,
+      isRecovering: !!isRecovering,
+      errorCode: status === 'error' ? errorCodeRef.current : null,
+      errorMessage: errorMessage ?? null,
+      errorCount: errorCount ?? 0,
+      statusMessage: statusMessage ?? null,
+      unlockRemainingSeconds: unlockRemainingSeconds ?? 0,
+      unlockProgress: unlockProgress ?? 0,
+      // `floor` is wired through although the backend does not populate it yet —
+      // cheaper than changing the contract again once it does.
+      roomName: resource?.name ?? null,
+      floor: resource?.floor ?? null,
+    });
+  }, [
+    status,
+    isRecovering,
+    errorMessage,
+    errorCount,
+    statusMessage,
+    unlockRemainingSeconds,
+    unlockProgress,
+    resource,
+  ]);
+
+  // Native -> JS commands. The event name must match VirdeeCommandEmitter in
+  // VirdeeFlowBridge.swift; a mismatch here fails silently.
+  useEffect(() => {
+    const emitterModule = NativeModules.VirdeeRestartEmitter;
+    if (!emitterModule) return undefined;
+
+    const emitter = new NativeEventEmitter(emitterModule);
+    const sub = emitter.addListener('VirdeeMobileKeyCommand', ({ command }) => {
+      console.log('[VirdeeMobileKeyHeadless] command', command);
+      switch (command) {
+        case 'openLock':     key.openLock(); break;
+        case 'cancelUnlock': key.cancelUnlock(); break;
+        case 'dismissError': key.resetAfterError(); break;
+        // One "Try Again" button, two failures behind it. Provisioning can fail
+        // before a key exists (PLUGIN_INIT_FAILED / "Endpoint setup timed out"),
+        // and retryUnlock() would retry an unlock that never started.
+        case 'retry':
+          if (key.isReady) {
+            key.retryUnlock();
+          } else {
+            key.initialize();
+          }
+          break;
+        default:
+          console.warn('[VirdeeMobileKeyHeadless] unknown command', command);
+      }
+    });
+    return () => sub.remove();
+  }, [key]);
+
+  return null;
+}
+
+// -----------------------------------------------------------------------------
 // Registration — native mounts these by name, on demand.
 // -----------------------------------------------------------------------------
 
 AppRegistry.registerComponent('VirdeeController', () => VirdeeController);
 AppRegistry.registerComponent('VirdeeClearIDV', () => VirdeeClearIDV);
 AppRegistry.registerComponent('VirdeeMobileKey', () => VirdeeMobileKey);
+AppRegistry.registerComponent('VirdeeMobileKeyHeadless', () => VirdeeMobileKeyHeadless);

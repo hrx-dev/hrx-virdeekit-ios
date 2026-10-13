@@ -174,6 +174,56 @@ the SDK re-initialises itself with `reset()` then `init()`.
 The cost is one runtime held for the lifetime of any process that opened a Virdee flow.
 That is the supported shape, not a workaround.
 
+## Driving the key yourself
+
+`presentMobileKey()` shows Virdee's own screen. For a screen of your own, take a
+controller instead — same SDK, same BLE, no Virdee UI at all:
+
+```swift
+let key = virdee.makeMobileKeyController(unlockTimeout: 10)
+
+key.state
+    .receive(on: DispatchQueue.main)
+    .sink { [weak self] state in
+        switch state.phase {
+        case .initializing, .provisioningKey:
+            self?.showPreparing(state.statusMessage)
+        case .unlocking:
+            self?.showHoldNearReader(secondsLeft: state.unlockRemainingSeconds)
+        case .success:
+            self?.showUnlocked()
+        case .error:
+            self?.showError(retryTitle: "Try Again")
+        default:
+            break
+        }
+
+        // Bluetooth has its own screens and must be checked before errorMessage.
+        switch state.bluetooth {
+        case .off:              self?.showBluetoothOff()               // no button
+        case .permissionDenied: self?.showOpenSettings()               // → openSettingsURLString
+        default:                break
+        }
+
+        self?.card.room = state.roomName
+    }
+    .store(in: &cancellables)
+
+key.start()            // unlock begins as soon as the key is ready
+// key.start(autoActivate: false) + key.openLock() to drive it from a button
+```
+
+`retry()` backs the "Try Again" button, `cancelUnlock()` returns to `.ready` without an
+error, and `stop()` unmounts when the screen goes away. Opening Settings is the host's
+call — VirdeeKit does not reach for `UIApplication`.
+
+**The two flows are mutually exclusive.** Virdee allow one consumer of the key per
+access grant, so starting a controller while their screen is presented — or the reverse
+— is refused and logged. Both remain available; just not at once.
+
+`floor` is carried in the state but the backend does not populate it yet, so expect
+`nil`. It is wired through so the contract does not have to change when it does.
+
 ### When the SDK goes quiet
 
 Re-entry re-initialises inside a warm runtime, and `reset()` touches async storage. If it

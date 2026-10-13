@@ -62,7 +62,62 @@ public protocol VirdeeService : AnyObject {
   func refresh()
   func presentIDVerification()
   func presentMobileKey()
+  func makeMobileKeyController(unlockTimeout: Foundation.TimeInterval) -> any VirdeeKit.VirdeeMobileKeyController
   func stop()
+}
+public enum VirdeeMobileKeyPhase : Swift.String, Swift.Equatable, Swift.Sendable {
+  case idle
+  case initializing
+  case provisioningKey
+  case ready
+  case unlocking
+  case success
+  case error
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum VirdeeBluetoothIssue : Swift.String, Swift.Equatable, Swift.Sendable {
+  case off
+  case permissionDenied
+  case unsupported
+  case resetting
+  case communicationFailed
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public struct VirdeeMobileKeyState : Swift.Equatable, Swift.Sendable {
+  public let phase: VirdeeKit.VirdeeMobileKeyPhase
+  public let isRecovering: Swift.Bool
+  public let bluetooth: VirdeeKit.VirdeeBluetoothIssue?
+  public let errorCode: Swift.String?
+  public let errorMessage: Swift.String?
+  public let errorCount: Swift.Int
+  public let statusMessage: Swift.String?
+  public let unlockRemainingSeconds: Swift.Int
+  public let unlockProgress: Swift.Double
+  public let roomName: Swift.String?
+  public let floor: Swift.String?
+  public static let idle: VirdeeKit.VirdeeMobileKeyState
+  public static func == (a: VirdeeKit.VirdeeMobileKeyState, b: VirdeeKit.VirdeeMobileKeyState) -> Swift.Bool
+}
+public protocol VirdeeMobileKeyController : AnyObject {
+  var state: Combine.AnyPublisher<VirdeeKit.VirdeeMobileKeyState, Swift.Never> { get }
+  var currentState: VirdeeKit.VirdeeMobileKeyState { get }
+  func start(autoActivate: Swift.Bool)
+  func openLock()
+  func cancelUnlock()
+  func retry()
+  func dismissError()
+  func stop()
+}
+extension VirdeeKit.VirdeeMobileKeyController {
+  public func start()
 }
 final public class VirdeeServiceImpl : VirdeeKit.VirdeeService {
   final public var requirements: [VirdeeKit.VirdeeRequirement] {
@@ -82,6 +137,7 @@ final public class VirdeeServiceImpl : VirdeeKit.VirdeeService {
   final public func stop()
   final public func presentIDVerification()
   final public func presentMobileKey()
+  final public func makeMobileKeyController(unlockTimeout: Foundation.TimeInterval = 10) -> any VirdeeKit.VirdeeMobileKeyController
 }
 public enum VirdeeKitVersion {
   public static let version: Swift.String
@@ -120,5 +176,9 @@ public struct VirdeeConfiguration {
 extension VirdeeKit.VirdeeEnvironment : Swift.Equatable {}
 extension VirdeeKit.VirdeeEnvironment : Swift.Hashable {}
 extension VirdeeKit.VirdeeEnvironment : Swift.RawRepresentable {}
+extension VirdeeKit.VirdeeMobileKeyPhase : Swift.Hashable {}
+extension VirdeeKit.VirdeeMobileKeyPhase : Swift.RawRepresentable {}
+extension VirdeeKit.VirdeeBluetoothIssue : Swift.Hashable {}
+extension VirdeeKit.VirdeeBluetoothIssue : Swift.RawRepresentable {}
 extension VirdeeKit.VirdeeLogLevel : Swift.Hashable {}
 extension VirdeeKit.VirdeeLogLevel : Swift.RawRepresentable {}

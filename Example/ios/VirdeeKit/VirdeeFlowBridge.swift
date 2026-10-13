@@ -26,6 +26,8 @@ final class VirdeeFlowBridge: NSObject {
     static var onCloseMobileKey: (() -> Void)?
     static var onFlowEvent: ((String, String, [String: Any]) -> Void)?
     static var onFailedToStart: ((String, String) -> Void)?
+    /// Headless mobile key only — one snapshot of `useMobileKey` state per change.
+    static var onMobileKeyState: (([String: Any]) -> Void)?
 
     @objc(failedToStart:)
     func failedToStart(_ payload: NSDictionary?) {
@@ -68,6 +70,12 @@ final class VirdeeFlowBridge: NSObject {
         main { Self.onCloseMobileKey?() }
     }
 
+    @objc(mobileKeyState:)
+    func mobileKeyState(_ state: NSDictionary) {
+        let dict = state as? [String: Any] ?? [:]
+        main { Self.onMobileKeyState?(dict) }
+    }
+
     @objc(onVirdeeEvent:event:payload:)
     func onVirdeeEvent(_ flow: String, event: String, payload: NSDictionary?) {
         let dict = payload as? [String: Any] ?? [:]
@@ -106,6 +114,10 @@ final class VirdeeRestartEmitter: RCTEventEmitter {
     /// and refresh() quietly stops re-reading requirements.
     private static let restartEvent = "VirdeeRestart"
 
+    /// Drives the headless mobile key surface. Same silent-failure rule as above —
+    /// it must match `addListener('VirdeeMobileKeyCommand', …)` in Example/index.js.
+    private static let mobileKeyCommandEvent = "VirdeeMobileKeyCommand"
+
     private static weak var current: VirdeeRestartEmitter?
     private var hasListeners = false
 
@@ -116,7 +128,9 @@ final class VirdeeRestartEmitter: RCTEventEmitter {
 
     override static func requiresMainQueueSetup() -> Bool { false }
 
-    override func supportedEvents() -> [String] { [Self.restartEvent] }
+    override func supportedEvents() -> [String] {
+        [Self.restartEvent, Self.mobileKeyCommandEvent]
+    }
 
     override func startObserving() { hasListeners = true }
     override func stopObserving() { hasListeners = false }
@@ -124,5 +138,18 @@ final class VirdeeRestartEmitter: RCTEventEmitter {
     static func emitRestart() {
         guard let emitter = current, emitter.hasListeners else { return }
         emitter.sendEvent(withName: Self.restartEvent, body: nil)
+    }
+
+    /// `command` is one of initialize / openLock / cancelUnlock / retry / dismissError;
+    /// the switch that consumes them lives in VirdeeMobileKeyHeadless in index.js.
+    @discardableResult
+    static func emitMobileKeyCommand(_ command: String) -> Bool {
+        guard let emitter = current, emitter.hasListeners else {
+            VirdeeLog.shared.warning("bridge", "no JS listener for \(command) — command dropped")
+            return false
+        }
+        VirdeeLog.shared.debug("bridge", "→ js mobileKey.\(command)")
+        emitter.sendEvent(withName: Self.mobileKeyCommandEvent, body: ["command": command])
+        return true
     }
 }

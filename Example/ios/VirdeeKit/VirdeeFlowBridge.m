@@ -23,6 +23,8 @@ RCT_EXTERN_METHOD(closeClearIDV)
 RCT_EXTERN_METHOD(showMobileKeyButton)
 RCT_EXTERN_METHOD(closeMobileKey)
 
+RCT_EXTERN_METHOD(mobileKeyState:(NSDictionary *)state)
+
 RCT_EXTERN_METHOD(onVirdeeEvent:(NSString *)flow
                   event:(NSString *)event
                   payload:(NSDictionary *)payload)

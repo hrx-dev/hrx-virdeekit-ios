@@ -14,6 +14,7 @@ private enum Surface {
     static let controller = "VirdeeController"
     static let clearIDV = "VirdeeClearIDV"
     static let mobileKey = "VirdeeMobileKey"
+    static let mobileKeyHeadless = "VirdeeMobileKeyHeadless"
 }
 
 public final class VirdeeServiceImpl: VirdeeService {
@@ -26,6 +27,11 @@ public final class VirdeeServiceImpl: VirdeeService {
     private var clearIDVWindow: UIWindow?
     private var mobileKeyWindow: UIWindow?
     private var pendingIDVAccessGrantId: String?
+
+    /// The hidden surface behind a `VirdeeMobileKeyController`, and the controller
+    /// it feeds. Weak: the controller belongs to whoever presents the screen.
+    private var headlessKeyView: UIView?
+    private weak var mobileKeyController: VirdeeMobileKeyControllerImpl?
 
     /// `start(session:)` arms this; the first `.requirementsLoaded` or `.failedToStart`
     /// disarms it. Without it a `reset()` that never returns leaves the host on a
@@ -132,6 +138,7 @@ public final class VirdeeServiceImpl: VirdeeService {
         //    with the new credentials — the sequence Virdee prescribe for re-entry.
         dismiss(&clearIDVWindow)
         dismiss(&mobileKeyWindow)
+        unmountMobileKeyHeadless()
         controllerView?.removeFromSuperview()
         controllerView = nil
 
@@ -173,7 +180,22 @@ public final class VirdeeServiceImpl: VirdeeService {
 
     public func presentMobileKey() {
         guard let accessGrantId = session?.accessGrantId, mobileKeyWindow == nil else { return }
+        // Virdee allow one consumer of the key per access grant. Mounting Virdee's
+        // own screen while a headless controller is live would give two.
+        guard headlessKeyView == nil else {
+            VirdeeLog.shared.error(
+                "service",
+                "presentMobileKey ignored — a VirdeeMobileKeyController is running. Call stop() on it first."
+            )
+            return
+        }
         mobileKeyWindow = makeOverlay(moduleName: Surface.mobileKey, accessGrantId: accessGrantId)
+    }
+
+    public func makeMobileKeyController(unlockTimeout: TimeInterval = 10) -> VirdeeMobileKeyController {
+        let controller = VirdeeMobileKeyControllerImpl(service: self, unlockTimeout: unlockTimeout)
+        mobileKeyController = controller
+        return controller
     }
 
     /// Virdee's screens are hosted in a transparent key `UIWindow` rather than a modal
@@ -300,6 +322,11 @@ public final class VirdeeServiceImpl: VirdeeService {
             self.subject.send(.mobileKeyDismissed)
         }
 
+        // Routed through the service so every static sink has one owner.
+        VirdeeFlowBridge.onMobileKeyState = { [weak self] snapshot in
+            self?.mobileKeyController?.apply(snapshot)
+        }
+
         VirdeeFlowBridge.onFlowEvent = { [weak self] flow, event, payload in
             guard let self else { return }
             let outcome = Self.outcome(event: event, payload: payload)
@@ -327,6 +354,54 @@ public final class VirdeeServiceImpl: VirdeeService {
         }
     }
 
+    // MARK: - Headless mobile key
+
+    /// Mounts the headless surface. Hidden the same way the controller is: the host
+    /// draws everything, this only runs the SDK.
+    func mountMobileKeyHeadless(autoActivate: Bool, unlockTimeout: TimeInterval) -> Bool {
+        guard let accessGrantId = session?.accessGrantId else {
+            VirdeeLog.shared.error("service", "mobile key controller started before start(session:)")
+            return false
+        }
+        guard mobileKeyWindow == nil else {
+            VirdeeLog.shared.error(
+                "service",
+                "mobile key controller ignored — Virdee's own key screen is presented"
+            )
+            return false
+        }
+        guard headlessKeyView == nil else {
+            VirdeeLog.shared.warning("service", "mobile key controller already running")
+            return true
+        }
+        guard let view = runtime.makeSurface(
+            moduleName: Surface.mobileKeyHeadless,
+            initialProperties: [
+                "accessGrantId": accessGrantId,
+                "autoActivate": autoActivate,
+                "unlockTimeout": unlockTimeout,
+            ]
+        ) else {
+            VirdeeLog.shared.error("service", "could not create the \(Surface.mobileKeyHeadless) surface")
+            return false
+        }
+
+        view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+        view.alpha = 0
+        view.isUserInteractionEnabled = false
+        hostWindow()?.addSubview(view)
+        headlessKeyView = view
+        VirdeeLog.shared.info("service", "headless mobile key mounted (autoActivate \(autoActivate))")
+        return true
+    }
+
+    func unmountMobileKeyHeadless() {
+        guard headlessKeyView != nil else { return }
+        headlessKeyView?.removeFromSuperview()
+        headlessKeyView = nil
+        VirdeeLog.shared.info("service", "headless mobile key unmounted")
+    }
+
     /// Only the owner detaches: a second service that wired itself after us now holds the
     /// sinks, and clearing them here would silently unhook it.
     private func detachBridge() {
@@ -340,6 +415,7 @@ public final class VirdeeServiceImpl: VirdeeService {
         VirdeeFlowBridge.onCloseClearIDV = nil
         VirdeeFlowBridge.onCloseMobileKey = nil
         VirdeeFlowBridge.onFlowEvent = nil
+        VirdeeFlowBridge.onMobileKeyState = nil
     }
 
     private func markIDVerificationComplete() {
