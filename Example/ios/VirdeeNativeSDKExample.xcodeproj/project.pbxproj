@@ -18,6 +18,8 @@
 		A2FDA6B57793548BCC6E1831 /* VirdeeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A626094826AC86DEF9A0EDFE /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0A45680E105CD272307D8745 /* PrivacyInfo.xcprivacy */; };
 		C368A0FB1C680ABA3AFEBECD /* VirdeeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5280ACACAEE62C902A552619 /* VirdeeService.swift */; };
+		B1A0C0DE0000000000000101 /* VirdeeMobileKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0C0DE0000000000000201 /* VirdeeMobileKey.swift */; };
+		B1A0C0DE0000000000000102 /* VirdeeMobileKeyControllerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A0C0DE0000000000000202 /* VirdeeMobileKeyControllerImpl.swift */; };
 		D9636D61A7FE5E58AE4692DD /* VirdeeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */; };
 		E38A8F2BCA5E1AC287C33FAC /* VirdeeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586D6D886256F399456010AC /* VirdeeLog.swift */; };
 		E6C1DE3A5F800DB982322C0B /* VirdeeRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */; };
@@ -74,6 +76,8 @@
 		4383A08BC4A8CF8D0227A4D4 /* Pods-VirdeeNativeSDKExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VirdeeNativeSDKExample.release.xcconfig"; path = "Target Support Files/Pods-VirdeeNativeSDKExample/Pods-VirdeeNativeSDKExample.release.xcconfig"; sourceTree = "<group>"; };
 		5205BC53711155B8651C9284 /* ReactNativeBridge.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReactNativeBridge.swift; sourceTree = "<group>"; };
 		5280ACACAEE62C902A552619 /* VirdeeService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeService.swift; path = VirdeeKit/VirdeeService.swift; sourceTree = "<group>"; };
+		B1A0C0DE0000000000000201 /* VirdeeMobileKey.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeMobileKey.swift; path = VirdeeKit/VirdeeMobileKey.swift; sourceTree = "<group>"; };
+		B1A0C0DE0000000000000202 /* VirdeeMobileKeyControllerImpl.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeMobileKeyControllerImpl.swift; path = VirdeeKit/VirdeeMobileKeyControllerImpl.swift; sourceTree = "<group>"; };
 		586D6D886256F399456010AC /* VirdeeLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = VirdeeLog.swift; path = VirdeeKit/VirdeeLog.swift; sourceTree = "<group>"; };
 		58E18BEA56B4EBF7DEA2E0E2 /* VirdeeFlowBridge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = VirdeeFlowBridge.m; path = VirdeeKit/VirdeeFlowBridge.m; sourceTree = "<group>"; };
 		706B35FECE8918D9647BF7D9 /* VirdeeKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VirdeeKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -170,6 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				5280ACACAEE62C902A552619 /* VirdeeService.swift */,
+				B1A0C0DE0000000000000201 /* VirdeeMobileKey.swift */,
+				B1A0C0DE0000000000000202 /* VirdeeMobileKeyControllerImpl.swift */,
 				A9F1221F0D33082880ECA920 /* VirdeeServiceImpl.swift */,
 				2FE9551661BF79ABA57EDC4D /* VirdeeRuntime.swift */,
 				F12EB586B36B3B4BEEEF8DA3 /* VirdeeFlowBridge.swift */,
@@ -492,6 +498,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C368A0FB1C680ABA3AFEBECD /* VirdeeService.swift in Sources */,
+				B1A0C0DE0000000000000101 /* VirdeeMobileKey.swift in Sources */,
+				B1A0C0DE0000000000000102 /* VirdeeMobileKeyControllerImpl.swift in Sources */,
 				18C92879A184148263549A90 /* VirdeeServiceImpl.swift in Sources */,
 				E6C1DE3A5F800DB982322C0B /* VirdeeRuntime.swift in Sources */,
 				1C6065AF4296E559E33EA9A8 /* VirdeeFlowBridge.swift in Sources */,
@@ -879,7 +887,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
 				PRODUCT_NAME = VirdeeKit;
 				SDKROOT = iphoneos;
@@ -926,7 +934,7 @@
 					"-ObjC",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)/..=/VirdeeKit";
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.hardrock.virdeekit;
 				PRODUCT_NAME = VirdeeKit;
 				SDKROOT = iphoneos;

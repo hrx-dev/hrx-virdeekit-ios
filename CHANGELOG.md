@@ -2,6 +2,50 @@
 
 Versions are git tags; SwiftPM resolves by tag. See README for the release procedure.
 
+## 0.7.0
+
+### A headless mobile key, alongside the existing one
+
+`presentMobileKey()` is unchanged. For a host that draws the key screen itself there is
+now a controller that runs the same SDK with none of Virdee's UI:
+
+```swift
+let key = virdee.makeMobileKeyController(unlockTimeout: 10)
+key.state.sink { … }
+key.start()                       // or start(autoActivate: false) + openLock()
+```
+
+It publishes `VirdeeMobileKeyState` — phase, recovery flag, Bluetooth issue, error code
+and message, consecutive error count, the SDK's status line, the unlock countdown and
+progress, and the room — and takes `openLock()`, `cancelUnlock()`, `retry()`,
+`dismissError()`, `stop()`.
+
+`autoActivate` defaults to true, matching a design with no unlock button: the screen
+goes straight to "hold your phone near the reader" once the key is ready.
+
+**Bluetooth is typed, not a string.** `VirdeeBluetoothIssue` separates `.off` from
+`.permissionDenied` because they are different screens — one offers Settings, the other
+has nothing to tap. Mapped from the SDK's `BLE_OFF`, `BLE_PERMISSION_DENIED`,
+`BLE_UNAUTHORIZED`, `BLE_NOT_SUPPORTED`, `BLE_RESETTING`, `BLE_CONNECTION_LOST` and
+`BLE_FAILURE`.
+
+`floor` is in the state but always `nil` for now — the backend does not return it and
+has given no mapping. Carried anyway so the contract survives the day it does.
+
+**The two flows cannot run at once.** Virdee require a single `useMobileKey` consumer per
+access grant, so whichever starts second is refused and logged rather than quietly
+producing two.
+
+Internally this is a fourth RN surface, `VirdeeMobileKeyHeadless`, mounted hidden like
+the controller: state goes out through a new `mobileKeyState:` bridge selector, commands
+come back on a new `VirdeeMobileKeyCommand` emitter event.
+
+### Not verified
+
+None of it has been run: the digital key needs a physical device for BLE and live
+credentials. What is checked is that it compiles, that the JS and native selector names
+match, and that the state mapping covers every `MobileKeyStatus` the plugin defines.
+
 ## 0.6.0
 
 ### The JS runtime is never released

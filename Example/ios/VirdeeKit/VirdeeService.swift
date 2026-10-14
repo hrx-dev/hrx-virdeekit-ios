@@ -121,8 +121,17 @@ public protocol VirdeeService: AnyObject {
     /// Presents CLEAR ID verification full-screen. Call after `.idVerificationRequired`.
     func presentIDVerification()
 
-    /// Presents the digital key screen. Call after `.mobileKeyAvailable`.
+    /// Presents Virdee's own digital key screen. Call after `.mobileKeyAvailable`.
     func presentMobileKey()
+
+    /// Returns a controller that runs the digital key with **no Virdee UI**, for a
+    /// host that draws the screen itself. The factory flow above is unaffected, but
+    /// the two cannot run at once — Virdee allow one consumer of the key per access
+    /// grant, so whichever starts second is refused and logged.
+    ///
+    /// `unlockTimeout` is how long the unlock window stays open. Virdee's own screen
+    /// passes this through from its options; headless, it has to be stated here.
+    func makeMobileKeyController(unlockTimeout: TimeInterval) -> VirdeeMobileKeyController
 
     /// Ends the session: detaches the bridge and unmounts every Virdee surface.
     ///
